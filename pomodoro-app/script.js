@@ -1,20 +1,12 @@
 const quotes = [
     { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
     { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
-    { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
-    { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
-    { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-    { text: "Amateurs sit and wait for inspiration, the rest of us just get up and go to work.", author: "Stephen King" },
-    { text: "Starve your distractions, feed your focus.", author: "Unknown" },
-    { text: "Nothing is less productive than to make more efficient what should not be done at all.", author: "Peter Drucker" }
+    { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" }
 ];
 
 const backgrounds = [
-    { url: 'https://images.unsplash.com/photo-1506744626753-eba7bc81591e?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite National Park, USA', photographer: 'Bailey Zindel' },
     { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80', location: 'Mount Robson, Canada', photographer: 'David Marcu' },
-    { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', location: 'Mount Tamalpais, USA', photographer: 'Tim Swaan' },
-    { url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80', location: 'Great Smoky Mountains, USA', photographer: 'Sergey Shmidt' },
-    { url: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite Valley, USA', photographer: 'Carmine De Fazio' }
+    { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', location: 'Mount Tamalpais, USA', photographer: 'Tim Swaan' }
 ];
 
 let workMinutes = 15;
@@ -24,10 +16,12 @@ let isRunning = false;
 let isWorkMode = true;
 let timerId = null;
 
-let currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+let quoteHistory = [];
+let currentQuoteHistoryIndex = -1;
 let quoteInterval = null;
 
-let currentBgIndex = Math.floor(Math.random() * backgrounds.length);
+let dynamicBackgrounds = [];
+let currentBgIndex = 0;
 
 const timeDisplay = document.getElementById('time-display');
 const modeText = document.getElementById('mode-text');
@@ -49,18 +43,12 @@ const timerCard = document.querySelector('.timer-card');
 const overlay = document.querySelector('.overlay');
 
 opacitySlider.addEventListener('input', (e) => {
-    const val = e.target.value; // 0 to 100
-    const alpha = (val / 100) * 0.15;
-    const blur = (val / 100) * 10;
-    const shadow = (val / 100) * 0.3;
-    const border = (val / 100) * 0.2;
-    const overlayAlpha = (val / 100) * 0.4;
-    
-    timerCard.style.setProperty('--card-opacity', alpha);
-    timerCard.style.setProperty('--card-blur', `${blur}px`);
-    timerCard.style.setProperty('--card-shadow', shadow);
-    timerCard.style.setProperty('--card-border', border);
-    overlay.style.setProperty('--overlay-opacity', overlayAlpha);
+    const val = e.target.value; 
+    timerCard.style.setProperty('--card-opacity', (val / 100) * 0.15);
+    timerCard.style.setProperty('--card-blur', `${(val / 100) * 10}px`);
+    timerCard.style.setProperty('--card-shadow', (val / 100) * 0.3);
+    timerCard.style.setProperty('--card-border', (val / 100) * 0.2);
+    overlay.style.setProperty('--overlay-opacity', (val / 100) * 0.4);
 });
 
 function updateDisplay() {
@@ -69,21 +57,44 @@ function updateDisplay() {
     timeDisplay.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
-function updateQuote() {
-    const q = quotes[currentQuoteIndex];
-    quoteText.innerText = `"${q.text}"`;
-    quoteAuthor.innerText = `- ${q.author}`;
+function displayQuoteFromHistory() {
+    const q = quoteHistory[currentQuoteHistoryIndex];
+    if(q) {
+        quoteText.innerText = `"${q.quote}"`;
+        quoteAuthor.innerText = `- ${q.author}`;
+    }
 }
 
 function nextQuote() {
-    currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-    updateQuote();
+    if (currentQuoteHistoryIndex < quoteHistory.length - 1) {
+        currentQuoteHistoryIndex++;
+        displayQuoteFromHistory();
+    } else {
+        quoteText.style.opacity = 0.5;
+        fetch('https://dummyjson.com/quotes/random')
+            .then(res => res.json())
+            .then(data => {
+                quoteHistory.push(data);
+                currentQuoteHistoryIndex++;
+                displayQuoteFromHistory();
+                quoteText.style.opacity = 1;
+            })
+            .catch(() => {
+                const q = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteHistory.push({quote: q.text, author: q.author});
+                currentQuoteHistoryIndex++;
+                displayQuoteFromHistory();
+                quoteText.style.opacity = 1;
+            });
+    }
     resetQuoteTimer();
 }
 
 function prevQuote() {
-    currentQuoteIndex = (currentQuoteIndex - 1 + quotes.length) % quotes.length;
-    updateQuote();
+    if (currentQuoteHistoryIndex > 0) {
+        currentQuoteHistoryIndex--;
+        displayQuoteFromHistory();
+    }
     resetQuoteTimer();
 }
 
@@ -95,20 +106,40 @@ function resetQuoteTimer() {
 prevQuoteBtn.onclick = prevQuote;
 nextQuoteBtn.onclick = nextQuote;
 
+function fetchBackgrounds() {
+    fetch(`https://picsum.photos/v2/list?page=${Math.floor(Math.random() * 10) + 1}&limit=100`)
+        .then(res => res.json())
+        .then(data => {
+            dynamicBackgrounds = data.sort(() => Math.random() - 0.5);
+            updateBackground();
+        });
+}
+
 function updateBackground() {
-    const bg = backgrounds[currentBgIndex];
-    document.body.style.backgroundImage = `url('${bg.url}')`;
-    bgLocation.innerText = bg.location;
-    bgPhotographer.innerText = `Photo by ${bg.photographer}`;
+    if (dynamicBackgrounds.length > 0) {
+        const bg = dynamicBackgrounds[currentBgIndex % dynamicBackgrounds.length];
+        document.body.style.backgroundImage = `url('https://picsum.photos/id/${bg.id}/1920/1080')`;
+        bgLocation.innerText = "Global Photography";
+        bgPhotographer.innerText = `Photo by ${bg.author}`;
+    } else {
+        const bg = backgrounds[currentBgIndex % backgrounds.length];
+        document.body.style.backgroundImage = `url('${bg.url}')`;
+        bgLocation.innerText = bg.location;
+        bgPhotographer.innerText = `Photo by ${bg.photographer}`;
+    }
 }
 
 function nextBackground() {
-    currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+    currentBgIndex = (currentBgIndex + 1);
     updateBackground();
 }
 
 function prevBackground() {
-    currentBgIndex = (currentBgIndex - 1 + backgrounds.length) % backgrounds.length;
+    if (dynamicBackgrounds.length > 0) {
+        currentBgIndex = (currentBgIndex - 1 + dynamicBackgrounds.length) % dynamicBackgrounds.length;
+    } else {
+        currentBgIndex = (currentBgIndex - 1 + backgrounds.length) % backgrounds.length;
+    }
     updateBackground();
 }
 
@@ -130,7 +161,7 @@ function startTimer() {
             isWorkMode = !isWorkMode;
             timeLeft = (isWorkMode ? workMinutes : restMinutes) * 60;
             modeText.innerText = isWorkMode ? "Work Session" : "Rest Time";
-            updateQuote();
+            nextQuote();
             nextBackground();
             
             // Auto start next session
@@ -154,7 +185,7 @@ function resetTimer() {
     modeText.innerText = "Work Session";
     timeLeft = workMinutes * 60;
     updateDisplay();
-    updateQuote();
+    displayQuoteFromHistory();
     updateBackground();
 }
 
@@ -190,6 +221,6 @@ resetBtn.onclick = resetTimer;
 
 // Init
 updateDisplay();
-updateQuote();
-updateBackground();
+nextQuote(); // Fetches first quote
+fetchBackgrounds(); // Fetches dynamic backgrounds
 resetQuoteTimer();
