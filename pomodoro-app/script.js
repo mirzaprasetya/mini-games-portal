@@ -1,7 +1,16 @@
 const quotes = [
-    { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-    { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
-    { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" }
+    { quote: "The secret of getting ahead is getting started.", author: "Mark Twain", explanation: "Procrastination often comes from being overwhelmed by the whole task. Just taking the very first small step builds momentum." },
+    { quote: "It always seems impossible until it's done.", author: "Nelson Mandela", explanation: "Large goals can seem insurmountable when you begin. Focus on consistent effort, and what seemed impossible will eventually be finished." },
+    { quote: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson", explanation: "Time never stops moving forward. Instead of worrying about how much time has passed, simply focus on making continuous progress." },
+    { quote: "Focus on being productive instead of busy.", author: "Tim Ferriss", explanation: "Being busy just means doing things; being productive means doing the right things that actually move you closer to your goals." },
+    { quote: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar", explanation: "Perfectionism prevents progress. Everyone starts as a beginner; the only way to achieve greatness is to allow yourself to begin." },
+    { quote: "Amateurs sit and wait for inspiration, the rest of us just get up and go to work.", author: "Stephen King", explanation: "Relying on motivation is unreliable. True professionals build routines and start working even when they don't feel inspired." },
+    { quote: "Starve your distractions, feed your focus.", author: "Unknown", explanation: "Your attention is a limited resource. By actively removing distractions (like phone notifications), you naturally enhance your ability to focus." },
+    { quote: "Nothing is less productive than to make more efficient what should not be done at all.", author: "Peter Drucker", explanation: "Doing a useless task very quickly doesn't make it useful. Always question if a task is actually necessary before trying to optimize it." },
+    { quote: "Eat a live frog first thing in the morning and nothing worse will happen.", author: "Mark Twain", explanation: "The 'frog' is your hardest, most important task. If you do it first, the rest of your day will feel easy and highly productive." },
+    { quote: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.", author: "Will Durant", explanation: "Success isn't about one giant leap; it's about the small, consistent habits you build and execute every single day." },
+    { quote: "The way to get started is to quit talking and begin doing.", author: "Walt Disney", explanation: "Planning and discussing are easy traps to fall into. Real progress only happens when you transition from planning to execution." },
+    { quote: "By failing to prepare, you are preparing to fail.", author: "Benjamin Franklin", explanation: "While execution is key, rushing blindly into work causes mistakes. Taking a few minutes to outline your tasks saves hours of wasted effort." }
 ];
 
 const backgrounds = [
@@ -74,22 +83,10 @@ function nextQuote() {
         currentQuoteHistoryIndex++;
         displayQuoteFromHistory();
     } else {
-        quoteText.style.opacity = 0.5;
-        fetch('https://dummyjson.com/quotes/random')
-            .then(res => res.json())
-            .then(data => {
-                quoteHistory.push(data);
-                currentQuoteHistoryIndex++;
-                displayQuoteFromHistory();
-                quoteText.style.opacity = 1;
-            })
-            .catch(() => {
-                const q = quotes[Math.floor(Math.random() * quotes.length)];
-                quoteHistory.push({quote: q.text, author: q.author});
-                currentQuoteHistoryIndex++;
-                displayQuoteFromHistory();
-                quoteText.style.opacity = 1;
-            });
+        const q = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteHistory.push(q);
+        currentQuoteHistoryIndex++;
+        displayQuoteFromHistory();
     }
     resetQuoteTimer();
 }
@@ -110,11 +107,25 @@ function resetQuoteTimer() {
 prevQuoteBtn.onclick = prevQuote;
 nextQuoteBtn.onclick = nextQuote;
 
+const explanationModal = document.getElementById('explanation-modal');
+const closeModal = document.getElementById('close-modal');
+const explanationText = document.getElementById('explanation-text');
+
 explainQuoteBtn.onclick = () => {
     const q = quoteHistory[currentQuoteHistoryIndex];
-    if (q) {
-        const query = encodeURIComponent(`meaning of quote "${q.quote}" by ${q.author}`);
-        window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    if (q && q.explanation) {
+        explanationText.innerText = q.explanation;
+        explanationModal.style.display = 'flex';
+    }
+};
+
+closeModal.onclick = () => {
+    explanationModal.style.display = 'none';
+};
+
+window.onclick = (e) => {
+    if (e.target === explanationModal) {
+        explanationModal.style.display = 'none';
     }
 };
 

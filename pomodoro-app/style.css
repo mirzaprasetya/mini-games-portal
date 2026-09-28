@@ -270,3 +270,39 @@ button:active { transform: scale(0.95); }
         left: 15px;
     }
 }
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; top: 0; 
+    width: 100vw; height: 100vh; 
+    background-color: rgba(0,0,0,0.6); 
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    justify-content: center; align-items: center;
+}
+
+.modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    padding: 20px 30px;
+    border-radius: 15px;
+    width: 85%;
+    max-width: 400px;
+    text-align: left;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    color: white;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.close-modal:hover { opacity: 1; }
