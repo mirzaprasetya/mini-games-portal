@@ -116,6 +116,19 @@ window.onclick = (e) => {
     }
 };
 
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+fullscreenBtn.onclick = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+};
+
 function fetchBackgrounds() {
     // Start with our curated list
     dynamicBackgrounds = [...backgrounds];
