@@ -5,8 +5,11 @@ const quotes = [
 ];
 
 const backgrounds = [
+    { url: 'https://images.unsplash.com/photo-1506744626753-eba7bc81591e?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite National Park, USA', photographer: 'Bailey Zindel' },
     { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80', location: 'Mount Robson, Canada', photographer: 'David Marcu' },
-    { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', location: 'Mount Tamalpais, USA', photographer: 'Tim Swaan' }
+    { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', location: 'Mount Tamalpais, USA', photographer: 'Tim Swaan' },
+    { url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80', location: 'Great Smoky Mountains, USA', photographer: 'Sergey Shmidt' },
+    { url: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite Valley, USA', photographer: 'Carmine De Fazio' }
 ];
 
 let workMinutes = 15;
@@ -107,10 +110,20 @@ prevQuoteBtn.onclick = prevQuote;
 nextQuoteBtn.onclick = nextQuote;
 
 function fetchBackgrounds() {
-    fetch(`https://picsum.photos/v2/list?page=${Math.floor(Math.random() * 10) + 1}&limit=100`)
+    // Start with our curated list
+    dynamicBackgrounds = [...backgrounds];
+    
+    fetch(`https://picsum.photos/v2/list?page=${Math.floor(Math.random() * 10) + 1}&limit=50`)
         .then(res => res.json())
         .then(data => {
-            dynamicBackgrounds = data.sort(() => Math.random() - 0.5);
+            const apiBgs = data.map(item => ({
+                url: `https://picsum.photos/id/${item.id}/1920/1080`,
+                location: 'Global Photography',
+                photographer: item.author
+            }));
+            
+            // Mix them together and shuffle
+            dynamicBackgrounds = [...backgrounds, ...apiBgs].sort(() => Math.random() - 0.5);
             updateBackground();
         });
 }
@@ -118,11 +131,6 @@ function fetchBackgrounds() {
 function updateBackground() {
     if (dynamicBackgrounds.length > 0) {
         const bg = dynamicBackgrounds[currentBgIndex % dynamicBackgrounds.length];
-        document.body.style.backgroundImage = `url('https://picsum.photos/id/${bg.id}/1920/1080')`;
-        bgLocation.innerText = "Global Photography";
-        bgPhotographer.innerText = `Photo by ${bg.author}`;
-    } else {
-        const bg = backgrounds[currentBgIndex % backgrounds.length];
         document.body.style.backgroundImage = `url('${bg.url}')`;
         bgLocation.innerText = bg.location;
         bgPhotographer.innerText = `Photo by ${bg.photographer}`;
@@ -130,17 +138,17 @@ function updateBackground() {
 }
 
 function nextBackground() {
-    currentBgIndex = (currentBgIndex + 1);
-    updateBackground();
+    if (dynamicBackgrounds.length > 0) {
+        currentBgIndex = (currentBgIndex + 1) % dynamicBackgrounds.length;
+        updateBackground();
+    }
 }
 
 function prevBackground() {
     if (dynamicBackgrounds.length > 0) {
         currentBgIndex = (currentBgIndex - 1 + dynamicBackgrounds.length) % dynamicBackgrounds.length;
-    } else {
-        currentBgIndex = (currentBgIndex - 1 + backgrounds.length) % backgrounds.length;
+        updateBackground();
     }
-    updateBackground();
 }
 
 prevBgBtn.onclick = prevBackground;
