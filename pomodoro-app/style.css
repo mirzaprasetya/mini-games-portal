@@ -17,7 +17,7 @@ body {
 .overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, var(--overlay-opacity, 0.4));
     z-index: 1;
 }
 
@@ -107,14 +107,14 @@ body {
 }
 
 .timer-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, var(--card-opacity, 0.15));
+    backdrop-filter: blur(var(--card-blur, 10px));
+    -webkit-backdrop-filter: blur(var(--card-blur, 10px));
     border-radius: 20px;
     padding: 40px;
     text-align: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, var(--card-shadow, 0.3));
+    border: 1px solid rgba(255, 255, 255, var(--card-border, 0.2));
     width: 100%;
     max-width: 400px;
 }

@@ -44,6 +44,24 @@ const bgLocation = document.getElementById('bg-location');
 const bgPhotographer = document.getElementById('bg-photographer');
 const prevBgBtn = document.getElementById('prev-bg');
 const nextBgBtn = document.getElementById('next-bg');
+const opacitySlider = document.getElementById('opacity-slider');
+const timerCard = document.querySelector('.timer-card');
+const overlay = document.querySelector('.overlay');
+
+opacitySlider.addEventListener('input', (e) => {
+    const val = e.target.value; // 0 to 100
+    const alpha = (val / 100) * 0.15;
+    const blur = (val / 100) * 10;
+    const shadow = (val / 100) * 0.3;
+    const border = (val / 100) * 0.2;
+    const overlayAlpha = (val / 100) * 0.4;
+    
+    timerCard.style.setProperty('--card-opacity', alpha);
+    timerCard.style.setProperty('--card-blur', `${blur}px`);
+    timerCard.style.setProperty('--card-shadow', shadow);
+    timerCard.style.setProperty('--card-border', border);
+    overlay.style.setProperty('--overlay-opacity', overlayAlpha);
+});
 
 function updateDisplay() {
     const m = Math.floor(timeLeft / 60);
