@@ -10,11 +10,11 @@ const quotes = [
 ];
 
 const backgrounds = [
-    'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-    'https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+    { url: 'https://images.unsplash.com/photo-1506744626753-eba7bc81591e?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite National Park, USA', photographer: 'Bailey Zindel' },
+    { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80', location: 'Mount Robson, Canada', photographer: 'David Marcu' },
+    { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', location: 'Mount Tamalpais, USA', photographer: 'Tim Swaan' },
+    { url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80', location: 'Great Smoky Mountains, USA', photographer: 'Sergey Shmidt' },
+    { url: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite Valley, USA', photographer: 'Carmine De Fazio' }
 ];
 
 let workMinutes = 15;
@@ -27,6 +27,8 @@ let timerId = null;
 let currentQuoteIndex = Math.floor(Math.random() * quotes.length);
 let quoteInterval = null;
 
+let currentBgIndex = Math.floor(Math.random() * backgrounds.length);
+
 const timeDisplay = document.getElementById('time-display');
 const modeText = document.getElementById('mode-text');
 const startBtn = document.getElementById('start-btn');
@@ -38,6 +40,10 @@ const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
 const prevQuoteBtn = document.getElementById('prev-quote');
 const nextQuoteBtn = document.getElementById('next-quote');
+const bgLocation = document.getElementById('bg-location');
+const bgPhotographer = document.getElementById('bg-photographer');
+const prevBgBtn = document.getElementById('prev-bg');
+const nextBgBtn = document.getElementById('next-bg');
 
 function updateDisplay() {
     const m = Math.floor(timeLeft / 60);
@@ -72,9 +78,24 @@ prevQuoteBtn.onclick = prevQuote;
 nextQuoteBtn.onclick = nextQuote;
 
 function updateBackground() {
-    const bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    document.body.style.backgroundImage = `url('${bg}')`;
+    const bg = backgrounds[currentBgIndex];
+    document.body.style.backgroundImage = `url('${bg.url}')`;
+    bgLocation.innerText = bg.location;
+    bgPhotographer.innerText = `Photo by ${bg.photographer}`;
 }
+
+function nextBackground() {
+    currentBgIndex = (currentBgIndex + 1) % backgrounds.length;
+    updateBackground();
+}
+
+function prevBackground() {
+    currentBgIndex = (currentBgIndex - 1 + backgrounds.length) % backgrounds.length;
+    updateBackground();
+}
+
+prevBgBtn.onclick = prevBackground;
+nextBgBtn.onclick = nextBackground;
 
 function startTimer() {
     if (isRunning) return;
@@ -92,7 +113,7 @@ function startTimer() {
             timeLeft = (isWorkMode ? workMinutes : restMinutes) * 60;
             modeText.innerText = isWorkMode ? "Work Session" : "Rest Time";
             updateQuote();
-            updateBackground();
+            nextBackground();
             
             // Auto start next session
             startTimer();
