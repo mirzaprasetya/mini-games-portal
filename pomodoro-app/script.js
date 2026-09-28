@@ -5,7 +5,7 @@ const quotes = [
 ];
 
 const backgrounds = [
-    { url: 'https://images.unsplash.com/photo-1506744626753-eba7bc81591e?auto=format&fit=crop&w=1920&q=80', location: 'Yosemite National Park, USA', photographer: 'Bailey Zindel' },
+    { url: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1920&q=80', location: 'Banff National Park, Canada', photographer: 'Qusai Akoud' },
     { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80', location: 'Mount Robson, Canada', photographer: 'David Marcu' },
     { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80', location: 'Mount Tamalpais, USA', photographer: 'Tim Swaan' },
     { url: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80', location: 'Great Smoky Mountains, USA', photographer: 'Sergey Shmidt' },
@@ -37,6 +37,7 @@ const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
 const prevQuoteBtn = document.getElementById('prev-quote');
 const nextQuoteBtn = document.getElementById('next-quote');
+const explainQuoteBtn = document.getElementById('explain-quote');
 const bgLocation = document.getElementById('bg-location');
 const bgPhotographer = document.getElementById('bg-photographer');
 const prevBgBtn = document.getElementById('prev-bg');
@@ -108,6 +109,14 @@ function resetQuoteTimer() {
 
 prevQuoteBtn.onclick = prevQuote;
 nextQuoteBtn.onclick = nextQuote;
+
+explainQuoteBtn.onclick = () => {
+    const q = quoteHistory[currentQuoteHistoryIndex];
+    if (q) {
+        const query = encodeURIComponent(`meaning of quote "${q.quote}" by ${q.author}`);
+        window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    }
+};
 
 function fetchBackgrounds() {
     // Start with our curated list
