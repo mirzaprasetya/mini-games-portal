@@ -101,28 +101,6 @@ body {
     position: relative;
 }
 
-.arrow-btn[data-tooltip]::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 120%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    z-index: 100;
-}
-
-.arrow-btn:hover::after {
-    opacity: 1;
-}
-
 .arrow-btn:hover {
     background: rgba(0,0,0,0.7);
 }
