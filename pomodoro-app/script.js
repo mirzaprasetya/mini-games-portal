@@ -129,6 +129,29 @@ fullscreenBtn.onclick = () => {
     }
 };
 
+let lastTap = 0;
+let lastToggle = 0;
+function handleZenModeToggle(e) {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('button')) return;
+    const now = Date.now();
+    if (now - lastToggle < 300) return; // Prevent double-fire
+    lastToggle = now;
+    document.body.classList.toggle('zen-mode');
+}
+
+document.body.addEventListener('dblclick', handleZenModeToggle);
+
+document.body.addEventListener('touchend', (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('button')) return;
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (tapLength < 500 && tapLength > 0) {
+        handleZenModeToggle(e);
+        e.preventDefault();
+    }
+    lastTap = currentTime;
+});
+
 function fetchBackgrounds() {
     // Start with our curated list
     dynamicBackgrounds = [...backgrounds];
