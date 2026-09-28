@@ -17,6 +17,9 @@ const targetCountryNameSpan = document.getElementById('target-country-name');
 const guessCountSpan = document.getElementById('guess-count');
 const playAgainBtn = document.getElementById('play-again-btn');
 const toastContainer = document.getElementById('toast-container');
+const hintBtn = document.getElementById('hint-btn');
+const giveupBtn = document.getElementById('giveup-btn');
+const winTitle = document.getElementById('win-title');
 
 function showToast(message, color = "rgba(0, 0, 0, 0.85)") {
     const toast = document.createElement('div');
@@ -36,8 +39,8 @@ function showToast(message, color = "rgba(0, 0, 0, 0.85)") {
 // Initialize Globe
 globe = Globe()
     (document.getElementById('globeViz'))
-    .width(400)
-    .height(600)
+    .width(window.innerWidth)
+    .height(window.innerHeight)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .polygonCapColor(feat => getPolygonColor(feat))
     .polygonSideColor(() => 'rgba(0, 0, 0, 0.1)')
@@ -180,6 +183,8 @@ function makeGuess(countryName) {
         // Win!
         targetCountryNameSpan.innerText = targetCountry.properties.NAME;
         guessCountSpan.innerText = guesses.length;
+        winTitle.innerText = "You Won!";
+        winTitle.style.color = "white";
         winScreen.style.display = 'block';
     }
 }
@@ -241,6 +246,43 @@ guessBtn.addEventListener('click', () => {
     }
 });
 
+hintBtn.addEventListener('click', () => {
+    if (winScreen.style.display === 'block') return;
+    
+    const unguessed = countries.filter(c => !guesses.find(g => g.feature.properties.ISO_A2 === c.properties.ISO_A2));
+    if (unguessed.length <= 1) return;
+    
+    const hintCandidates = unguessed.filter(c => c.properties.ISO_A2 !== targetCountry.properties.ISO_A2);
+    
+    hintCandidates.forEach(c => {
+        c.tempDist = getDistance(c.centroid[0], c.centroid[1], targetCountry.centroid[0], targetCountry.centroid[1]);
+    });
+    
+    hintCandidates.sort((a, b) => a.tempDist - b.tempDist);
+    makeGuess(hintCandidates[0].properties.NAME);
+});
+
+giveupBtn.addEventListener('click', () => {
+    if (winScreen.style.display === 'block') return;
+    
+    const guessObj = { feature: targetCountry, distance: 0 };
+    if (!guesses.find(g => g.feature.properties.ISO_A2 === targetCountry.properties.ISO_A2)) {
+        guesses.push(guessObj);
+    }
+    
+    globe.pointOfView({ lat: targetCountry.centroid[1], lng: targetCountry.centroid[0], altitude: 1.5 }, 1000);
+    
+    const sortedGuesses = [...guesses].sort((a, b) => a.distance - b.distance);
+    renderGuesses(sortedGuesses);
+    updateGlobe();
+    
+    targetCountryNameSpan.innerText = targetCountry.properties.NAME;
+    guessCountSpan.innerText = guesses.length;
+    winTitle.innerText = "Game Over (Gave Up)";
+    winTitle.style.color = "#e74c3c";
+    winScreen.style.display = 'block';
+});
+
 input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (autocompleteList.children.length > 0) {
@@ -285,4 +327,9 @@ document.addEventListener('click', function (e) {
     if (e.target !== input) {
         autocompleteList.innerHTML = '';
     }
+});
+
+window.addEventListener('resize', () => {
+    globe.width(window.innerWidth);
+    globe.height(window.innerHeight);
 });

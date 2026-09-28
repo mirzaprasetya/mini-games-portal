@@ -12,12 +12,10 @@ body {
 
 #game-container {
     position: relative;
-    width: 400px;
-    height: 600px;
+    width: 100vw;
+    height: 100vh;
     background-color: #70c5ce; /* Sky blue */
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    border-radius: 10px;
 }
 
 #start-screen, #game-over-screen {
@@ -118,4 +116,10 @@ button:hover {
 
 canvas {
     display: block;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

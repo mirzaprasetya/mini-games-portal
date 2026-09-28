@@ -29,11 +29,15 @@
             <div id="input-container">
                 <input type="text" id="country-input" placeholder="Enter country name..." autocomplete="off">
                 <button id="guess-btn">Guess</button>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; gap: 10px;">
+                    <button id="hint-btn" style="flex: 1; padding: 5px; font-size: 12px; border-radius: 4px; border: none; background: #f39c12; color: white; cursor: pointer;">Hint</button>
+                    <button id="giveup-btn" style="flex: 1; padding: 5px; font-size: 12px; border-radius: 4px; border: none; background: #e74c3c; color: white; cursor: pointer;">Give Up</button>
+                </div>
                 <div id="autocomplete-list" class="autocomplete-items"></div>
             </div>
             
             <div id="win-screen" style="display: none;">
-                <h2>You Won!</h2>
+                <h2 id="win-title">You Won!</h2>
                 <p>The country was <span id="target-country-name"></span></p>
                 <p>Guesses: <span id="guess-count"></span></p>
                 <button id="play-again-btn">Play Again</button>
