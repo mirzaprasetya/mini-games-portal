@@ -152,6 +152,32 @@ document.body.addEventListener('touchend', (e) => {
     lastTap = currentTime;
 });
 
+// Wake Lock API for keeping screen on
+let wakeLock = null;
+
+async function requestWakeLock() {
+    if ('wakeLock' in navigator) {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+        } catch (err) {
+            console.log(`Wake Lock error: ${err.message}`);
+        }
+    }
+}
+
+function releaseWakeLock() {
+    if (wakeLock !== null) {
+        wakeLock.release();
+        wakeLock = null;
+    }
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && isRunning) {
+        requestWakeLock();
+    }
+});
+
 function fetchBackgrounds() {
     // Start with our curated list
     dynamicBackgrounds = [...backgrounds];
@@ -202,6 +228,7 @@ function startTimer() {
     isRunning = true;
     startBtn.style.display = 'none';
     pauseBtn.style.display = 'block';
+    requestWakeLock();
     
     timerId = setInterval(() => {
         timeLeft--;
@@ -228,6 +255,7 @@ function pauseTimer() {
     clearInterval(timerId);
     startBtn.style.display = 'block';
     pauseBtn.style.display = 'none';
+    releaseWakeLock();
 }
 
 function resetTimer() {
