@@ -1,17 +1,4 @@
-const quotes = [
-    { quote: "The secret of getting ahead is getting started.", author: "Mark Twain", explanation: "Procrastination often comes from being overwhelmed by the whole task. Just taking the very first small step builds momentum." },
-    { quote: "It always seems impossible until it's done.", author: "Nelson Mandela", explanation: "Large goals can seem insurmountable when you begin. Focus on consistent effort, and what seemed impossible will eventually be finished." },
-    { quote: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson", explanation: "Time never stops moving forward. Instead of worrying about how much time has passed, simply focus on making continuous progress." },
-    { quote: "Focus on being productive instead of busy.", author: "Tim Ferriss", explanation: "Being busy just means doing things; being productive means doing the right things that actually move you closer to your goals." },
-    { quote: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar", explanation: "Perfectionism prevents progress. Everyone starts as a beginner; the only way to achieve greatness is to allow yourself to begin." },
-    { quote: "Amateurs sit and wait for inspiration, the rest of us just get up and go to work.", author: "Stephen King", explanation: "Relying on motivation is unreliable. True professionals build routines and start working even when they don't feel inspired." },
-    { quote: "Starve your distractions, feed your focus.", author: "Unknown", explanation: "Your attention is a limited resource. By actively removing distractions (like phone notifications), you naturally enhance your ability to focus." },
-    { quote: "Nothing is less productive than to make more efficient what should not be done at all.", author: "Peter Drucker", explanation: "Doing a useless task very quickly doesn't make it useful. Always question if a task is actually necessary before trying to optimize it." },
-    { quote: "Eat a live frog first thing in the morning and nothing worse will happen.", author: "Mark Twain", explanation: "The 'frog' is your hardest, most important task. If you do it first, the rest of your day will feel easy and highly productive." },
-    { quote: "We are what we repeatedly do. Excellence, then, is not an act, but a habit.", author: "Will Durant", explanation: "Success isn't about one giant leap; it's about the small, consistent habits you build and execute every single day." },
-    { quote: "The way to get started is to quit talking and begin doing.", author: "Walt Disney", explanation: "Planning and discussing are easy traps to fall into. Real progress only happens when you transition from planning to execution." },
-    { quote: "By failing to prepare, you are preparing to fail.", author: "Benjamin Franklin", explanation: "While execution is key, rushing blindly into work causes mistakes. Taking a few minutes to outline your tasks saves hours of wasted effort." }
-];
+// Quotes are loaded from quotes.js
 
 const backgrounds = [
     { url: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1920&q=80', location: 'Banff National Park, Canada', photographer: 'Qusai Akoud' },
