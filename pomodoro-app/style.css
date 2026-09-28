@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     font-family: 'Poppins', sans-serif;
-    min-height: 100vh;
+    min-height: 100dvh;
     width: 100vw;
     background-color: #000;
     background-image: url('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
@@ -296,7 +296,7 @@ button:active { transform: scale(0.95); }
         justify-content: center;
         gap: 30px;
         max-width: 900px;
-        padding-top: 5px;
+        padding: 0 20px;
     }
     
     .quote-container {
