@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Focus</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <a href="/" class="home-btn">🏠</a>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="quote-container">
+            <p id="quote-text">"The secret of getting ahead is getting started."</p>
+            <p id="quote-author">- Mark Twain</p>
+            <div class="quote-nav">
+                <button id="prev-quote" class="arrow-btn">◀</button>
+                <button id="next-quote" class="arrow-btn">▶</button>
+            </div>
+        </div>
+        
+        <div class="timer-card">
+            <h2 id="mode-text">Work Session</h2>
+            <div class="time-display" id="time-display">15:00</div>
+            
+            <div class="controls">
+                <button id="start-btn">Start</button>
+                <button id="pause-btn" style="display: none;">Pause</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+            
+            <div class="settings">
+                <div class="setting-group">
+                    <label>Work (min)</label>
+                    <div class="stepper">
+                        <button class="step-btn" id="work-minus">-</button>
+                        <span id="work-val">15</span>
+                        <button class="step-btn" id="work-plus">+</button>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>Rest (min)</label>
+                    <div class="stepper">
+                        <button class="step-btn" id="rest-minus">-</button>
+                        <span id="rest-val">5</span>
+                        <button class="step-btn" id="rest-plus">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
