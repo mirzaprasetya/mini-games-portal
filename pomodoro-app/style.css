@@ -51,27 +51,27 @@ body {
     align-items: center;
     width: 100%;
     max-width: 600px;
-    padding: 40px 20px;
+    padding: 20px 20px;
     box-sizing: border-box;
     margin: auto; /* Vertically and horizontally centers, but allows scroll if overflows */
 }
 
 .quote-container {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
     text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
 #quote-text {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     font-style: italic;
-    margin: 0 0 10px 0;
+    margin: 0 0 5px 0;
     line-height: 1.4;
 }
 
 #quote-author {
-    font-size: 16px;
+    font-size: 14px;
     margin: 0;
     opacity: 0.9;
 }
@@ -79,8 +79,8 @@ body {
 .quote-nav {
     display: flex;
     justify-content: center;
-    gap: 20px;
-    margin-top: 15px;
+    gap: 15px;
+    margin-top: 10px;
 }
 
 .arrow-btn {
@@ -88,16 +88,39 @@ body {
     color: white;
     border: none;
     border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
     padding: 0;
     cursor: pointer;
     transition: background 0.2s, transform 0.1s;
     text-shadow: none;
+    position: relative;
+}
+
+.arrow-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 100;
+}
+
+.arrow-btn:hover::after {
+    opacity: 1;
 }
 
 .arrow-btn:hover {
@@ -113,7 +136,7 @@ body {
     backdrop-filter: blur(var(--card-blur, 10px));
     -webkit-backdrop-filter: blur(var(--card-blur, 10px));
     border-radius: 20px;
-    padding: 40px;
+    padding: 25px;
     text-align: center;
     box-shadow: 0 8px 32px rgba(0, 0, 0, var(--card-shadow, 0.3));
     border: 1px solid rgba(255, 255, 255, var(--card-border, 0.2));
@@ -122,17 +145,17 @@ body {
 }
 
 #mode-text {
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
     font-weight: 400;
-    font-size: 22px;
+    font-size: 18px;
     letter-spacing: 2px;
     text-transform: uppercase;
 }
 
 .time-display {
-    font-size: 80px;
+    font-size: 65px;
     font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     font-variant-numeric: tabular-nums;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
@@ -141,7 +164,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 button {
