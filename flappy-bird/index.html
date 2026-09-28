@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird Clone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <a href="/" style="position: absolute; top: 15px; left: 15px; text-decoration: none; font-size: 20px; z-index: 9999; background: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">🏠</a>
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <h1>Flappy Bird</h1>
+            <h2>Choose Your Bird</h2>
+            <div id="bird-selection">
+                <button class="bird-btn" data-bird="🐦"><span class="emoji">🐦</span><span class="name">Blue Bird</span></button>
+                <button class="bird-btn" data-bird="🦅"><span class="emoji">🦅</span><span class="name">Eagle</span></button>
+                <button class="bird-btn" data-bird="🦆"><span class="emoji">🦆</span><span class="name">Duck</span></button>
+                <button class="bird-btn" data-bird="🦉"><span class="emoji">🦉</span><span class="name">Owl</span></button>
+                <button class="bird-btn" data-bird="🐧"><span class="emoji">🐧</span><span class="name">Penguin</span></button>
+            </div>
+            <p>Press Space, Click, or Tap to Jump</p>
+            <p style="margin-top: 15px; font-weight: bold; color: #f1c40f; font-size: 20px;">High Score: <span id="start-high-score">0</span></p>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="gameCanvas" width="400" height="600" style="display: none;"></canvas>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" style="display: none;">
+            <h1>Game Over</h1>
+            <p style="font-size: 28px; margin-bottom: 10px;">Score: <span id="final-score">0</span></p>
+            <p style="font-size: 24px; margin-bottom: 25px; color: #f1c40f;">High Score: <span id="game-over-high-score">0</span></p>
+            <button id="restart-btn">Try Again</button>
+            <button id="menu-btn" style="background-color: #3498db;">Change Bird</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

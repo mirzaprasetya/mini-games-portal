@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contexto Clone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div style="position: sticky; top: 15px; z-index: 9999; height: 0;">
+            <a href="/" style="position: absolute; top: 0; left: 0; text-decoration: none; font-size: 20px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">🏠</a>
+        </div>
+        <header>
+            <h1>Contexto</h1>
+            <p>Find the secret word. You have unlimited guesses.</p>
+            <p>The words were sorted by an artificial intelligence algorithm according to how similar they were to the secret word.</p>
+            <p style="font-weight: bold; margin-top: 10px;">Game #<span id="game-number"></span></p>
+        </header>
+
+        <main>
+            <div id="input-container">
+                <form id="guess-form">
+                    <input type="text" id="word-input" placeholder="type a word" autocomplete="off" autofocus>
+                </form>
+            </div>
+
+            <div id="stats" style="display: none;">
+                Guesses: <span id="guess-count">0</span>
+                <div style="margin-top: 10px;">
+                    <button id="hint-btn" class="action-btn">Give Hint</button>
+                    <button id="giveup-btn" class="action-btn">Give Up</button>
+                </div>
+            </div>
+
+            <div id="guesses-list">
+                <!-- Guesses will appear here -->
+            </div>
+            
+            <div id="win-message" style="display: none;">
+                <h2 id="win-title">Congratulations!</h2>
+                <p>The secret word was <strong><span id="target-word"></span></strong>.</p>
+                
+                <div class="summary-box">
+                    <h3>Game Summary</h3>
+                    <p>Total Guesses: <span id="final-guess-count">0</span></p>
+                    <p>Hints Used: <span id="hints-used-count">0</span></p>
+                    <p>Status: <span id="game-status"></span></p>
+                </div>
+
+                <button id="play-again-btn">Play Random Game</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

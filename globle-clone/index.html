@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globle Clone</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Dependencies -->
+    <script src="https://unpkg.com/d3"></script>
+    <script src="https://unpkg.com/three"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+</head>
+<body>
+    <div id="game-container">
+        <a href="/" style="position: absolute; top: 15px; left: 15px; text-decoration: none; font-size: 20px; z-index: 9999; background: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: background 0.2s; pointer-events: auto;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">🏠</a>
+        <div id="globeViz"></div>
+        
+        <div id="ui-container">
+            <div id="header">
+                <h1>Globle Clone</h1>
+                <p>Guess the hidden country!</p>
+            </div>
+            
+            <div id="guesses-list">
+                <!-- Guesses will be added here -->
+            </div>
+
+            <div id="input-container">
+                <input type="text" id="country-input" placeholder="Enter country name..." autocomplete="off">
+                <button id="guess-btn">Guess</button>
+                <div id="autocomplete-list" class="autocomplete-items"></div>
+            </div>
+            
+            <div id="win-screen" style="display: none;">
+                <h2>You Won!</h2>
+                <p>The country was <span id="target-country-name"></span></p>
+                <p>Guesses: <span id="guess-count"></span></p>
+                <button id="play-again-btn">Play Again</button>
+            </div>
+        </div>
+        <div id="toast-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
