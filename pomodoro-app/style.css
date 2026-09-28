@@ -207,6 +207,22 @@ button:active { transform: scale(0.95); }
 }
 .step-btn:hover { background: rgba(255,255,255,0.2); }
 
+.opacity-control {
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 20px;
+}
+.opacity-control label {
+    font-size: 14px;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 8px;
+}
+#opacity-slider {
+    width: 80%;
+    cursor: pointer;
+}
+
 .bg-info-container {
     text-align: center;
     margin-top: 30px;
@@ -341,6 +357,11 @@ button:active { transform: scale(0.95); }
     }
     
     .opacity-control {
-        display: none !important;
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+    
+    .opacity-control label {
+        margin-bottom: 5px;
     }
 }
