@@ -1,9 +1,10 @@
 body {
     margin: 0;
-    padding: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     font-family: 'Poppins', sans-serif;
     min-height: 100vh;
     width: 100vw;
+    background-color: #000;
     background-image: url('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
     background-size: cover;
     background-position: center;
@@ -13,6 +14,7 @@ body {
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .overlay {
@@ -285,3 +287,55 @@ button:active { transform: scale(0.95); }
 }
 
 .close-modal:hover { opacity: 1; }
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        max-width: 900px;
+        padding-top: 5px;
+    }
+    
+    .quote-container {
+        flex: 1;
+        margin-bottom: 0;
+        max-width: 45%;
+    }
+    
+    .timer-card {
+        flex: 1;
+        padding: 15px 20px;
+        max-width: 45%;
+    }
+    
+    .bg-info-container {
+        display: none;
+    }
+    
+    .time-display {
+        font-size: 45px;
+        margin-bottom: 10px;
+    }
+    
+    #quote-text {
+        font-size: 16px;
+    }
+    
+    .home-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+        bottom: 10px;
+        left: 10px;
+    }
+    
+    #fullscreen-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+        top: 10px !important;
+        right: 10px !important;
+    }
+}
