@@ -344,8 +344,8 @@ function adjustSetting(type, amount) {
 
 document.getElementById('work-minus').onclick = () => adjustSetting('work', -5);
 document.getElementById('work-plus').onclick = () => adjustSetting('work', 5);
-document.getElementById('rest-minus').onclick = () => adjustSetting('rest', -5);
-document.getElementById('rest-plus').onclick = () => adjustSetting('rest', 5);
+document.getElementById('rest-minus').onclick = () => adjustSetting('rest', -1);
+document.getElementById('rest-plus').onclick = () => adjustSetting('rest', 1);
 document.getElementById('session-minus').onclick = () => adjustSetting('session', -1);
 document.getElementById('session-plus').onclick = () => adjustSetting('session', 1);
 
