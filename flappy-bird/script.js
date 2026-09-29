@@ -224,10 +224,13 @@ function draw() {
     // Rotate bird downwards when falling, upwards when jumping
     let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (bird.velocity * 0.08)));
     
-    // Some emojis face left natively, so we flip them to face right
-    ctx.scale(-1, 1);
-    // When scaled negatively on X, rotation needs to be inverted to look correct
-    ctx.rotate(-rotation);
+    // Some emojis face left natively, so we flip them to face right (except the owl which faces forward)
+    if (selectedBird !== '🦉') {
+        ctx.scale(-1, 1);
+        ctx.rotate(-rotation);
+    } else {
+        ctx.rotate(rotation);
+    }
     
     ctx.fillText(selectedBird, 0, 0);
     ctx.restore();

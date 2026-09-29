@@ -83,6 +83,10 @@ h2 {
     transform: scaleX(-1);
 }
 
+.bird-btn[data-bird="🦉"] .emoji {
+    transform: scaleX(1);
+}
+
 .bird-btn .name {
     font-size: 14px;
     font-weight: bold;
