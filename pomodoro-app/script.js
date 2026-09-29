@@ -365,27 +365,13 @@ let userLocationStr = null;
 const prayerTimerEl = document.getElementById('prayer-timer');
 
 async function getCoordinates() {
-    return new Promise(async (resolve) => {
-        const fallback = async () => {
-            try {
-                const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
-                const ipData = await ipRes.json();
-                resolve({ latitude: ipData.latitude, longitude: ipData.longitude });
-            } catch (e) {
-                resolve(null);
-            }
-        };
-
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-                fallback,
-                { timeout: 5000, maximumAge: 600000 }
-            );
-        } else {
-            fallback();
-        }
-    });
+    try {
+        const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        const ipData = await ipRes.json();
+        return { latitude: ipData.latitude, longitude: ipData.longitude };
+    } catch (e) {
+        return null;
+    }
 }
 
 async function fetchPrayerTimes() {
