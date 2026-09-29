@@ -364,11 +364,16 @@ let prayerTimes = null;
 let userLocationStr = null;
 const prayerTimerEl = document.getElementById('prayer-timer');
 
-async function getCoordinates() {
+async function getCoordinatesAndLocation() {
     try {
         const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
         const ipData = await ipRes.json();
-        return { latitude: ipData.latitude, longitude: ipData.longitude };
+        return { 
+            latitude: ipData.latitude, 
+            longitude: ipData.longitude,
+            city: ipData.city,
+            country: ipData.country
+        };
     } catch (e) {
         return null;
     }
@@ -376,29 +381,12 @@ async function getCoordinates() {
 
 async function fetchPrayerTimes() {
     try {
-        const coords = await getCoordinates();
-        if (!coords) return;
-        const { latitude, longitude } = coords;
+        const locData = await getCoordinatesAndLocation();
+        if (!locData) return;
+        const { latitude, longitude, city, country } = locData;
         
-        try {
-            const nomRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-            const nomData = await nomRes.json();
-            const address = nomData.address || {};
-            
-            const parts = [];
-            if (address.suburb) parts.push(address.suburb);
-            else if (address.neighbourhood) parts.push(address.neighbourhood);
-            
-            if (address.city) parts.push(address.city);
-            else if (address.town) parts.push(address.town);
-            
-            if (address.country) parts.push(address.country);
-            
-            if (parts.length > 0) {
-                userLocationStr = parts.join(', ');
-            }
-        } catch (err) {
-            console.log("Reverse geocode failed", err);
+        if (city && country) {
+            userLocationStr = `${city}, ${country}`;
         }
         
         const prayerRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`);
