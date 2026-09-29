@@ -79,6 +79,8 @@ h2 {
 .bird-btn .emoji {
     font-size: 36px;
     margin-bottom: 5px;
+    display: inline-block;
+    transform: scaleX(-1);
 }
 
 .bird-btn .name {

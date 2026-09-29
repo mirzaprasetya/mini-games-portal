@@ -252,11 +252,11 @@ function startTimer() {
                 nextQuote();
                 nextBackground();
                 startTimer();
+                updateDisplay();
             } else {
                 // Finished a complete round (Work + Rest)
                 dailyStats.count++;
                 localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
-                updateDisplay(); // updates the daily stats UI
                 
                 currentSession++;
                 if (currentSession <= targetSessions) {
@@ -266,6 +266,7 @@ function startTimer() {
                     nextQuote();
                     nextBackground();
                     startTimer();
+                    updateDisplay();
                 } else {
                     // Target reached, stop completely
                     modeText.innerText = "All Rounds Complete! 🎉";
@@ -275,6 +276,7 @@ function startTimer() {
                     startBtn.style.display = 'block';
                     pauseBtn.style.display = 'none';
                     releaseWakeLock();
+                    updateDisplay();
                 }
             }
         } else {
