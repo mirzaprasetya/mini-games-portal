@@ -361,13 +361,18 @@ resetQuoteTimer();
 
 // Prayer Time Logic
 let prayerTimes = null;
+let userLocationStr = null;
 const prayerTimerEl = document.getElementById('prayer-timer');
 
 async function fetchPrayerTimes() {
     try {
         const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
         const ipData = await ipRes.json();
-        const { latitude, longitude } = ipData;
+        const { latitude, longitude, city, country } = ipData;
+        
+        if (city && country) {
+            userLocationStr = `${city}, ${country}`;
+        }
         
         const prayerRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`);
         const prayerData = await prayerRes.json();
@@ -421,12 +426,14 @@ function updatePrayerTimer() {
     const diffMs = nextPrayerMs - currentMs;
     const diffMins = Math.ceil(diffMs / 1000 / 60);
     
+    let locationHtml = userLocationStr ? `<div style="font-weight: 600; font-size: 15px; margin-bottom: 2px;">${userLocationStr}</div>` : '';
+    
     if (diffMins > 60) {
         const h = Math.floor(diffMins / 60);
         const m = diffMins % 60;
-        prayerTimerEl.innerText = `${h}h ${m}m to ${nextPrayerName} Prayer`;
+        prayerTimerEl.innerHTML = `${locationHtml}${h}h ${m}m to ${nextPrayerName} Prayer`;
     } else {
-        prayerTimerEl.innerText = `${diffMins} mins to ${nextPrayerName} Prayer`;
+        prayerTimerEl.innerHTML = `${locationHtml}${diffMins} mins to ${nextPrayerName} Prayer`;
     }
 }
 
