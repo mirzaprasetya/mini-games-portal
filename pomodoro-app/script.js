@@ -358,3 +358,76 @@ updateDisplay();
 nextQuote(); // Fetches first quote
 fetchBackgrounds(); // Fetches dynamic backgrounds
 resetQuoteTimer();
+
+// Prayer Time Logic
+let prayerTimes = null;
+const prayerTimerEl = document.getElementById('prayer-timer');
+
+async function fetchPrayerTimes() {
+    try {
+        const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        const ipData = await ipRes.json();
+        const { latitude, longitude } = ipData;
+        
+        const prayerRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`);
+        const prayerData = await prayerRes.json();
+        
+        const timings = prayerData.data.timings;
+        prayerTimes = {
+            Fajr: timings.Fajr,
+            Dhuhr: timings.Dhuhr,
+            Asr: timings.Asr,
+            Maghrib: timings.Maghrib,
+            Isha: timings.Isha
+        };
+        updatePrayerTimer();
+        setInterval(updatePrayerTimer, 60000);
+    } catch (err) {
+        console.log("Error fetching prayer times:", err);
+    }
+}
+
+function updatePrayerTimer() {
+    if (!prayerTimes) return;
+    
+    const now = new Date();
+    const currentMs = now.getTime();
+    
+    let nextPrayerName = null;
+    let nextPrayerMs = Infinity;
+    
+    for (const [name, timeStr] of Object.entries(prayerTimes)) {
+        const [hours, mins] = timeStr.split(':');
+        const prayerDate = new Date();
+        prayerDate.setHours(parseInt(hours, 10), parseInt(mins, 10), 0, 0);
+        
+        let prayerMs = prayerDate.getTime();
+        
+        if (prayerMs > currentMs && prayerMs < nextPrayerMs) {
+            nextPrayerMs = prayerMs;
+            nextPrayerName = name;
+        }
+    }
+    
+    if (!nextPrayerName) {
+        nextPrayerName = 'Fajr';
+        const [hours, mins] = prayerTimes.Fajr.split(':');
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(parseInt(hours, 10), parseInt(mins, 10), 0, 0);
+        nextPrayerMs = tomorrow.getTime();
+    }
+    
+    const diffMs = nextPrayerMs - currentMs;
+    const diffMins = Math.ceil(diffMs / 1000 / 60);
+    
+    if (diffMins > 60) {
+        const h = Math.floor(diffMins / 60);
+        const m = diffMins % 60;
+        prayerTimerEl.innerText = `${h}h ${m}m to ${nextPrayerName} Prayer`;
+    } else {
+        prayerTimerEl.innerText = `${diffMins} mins to ${nextPrayerName} Prayer`;
+    }
+}
+
+fetchPrayerTimes();

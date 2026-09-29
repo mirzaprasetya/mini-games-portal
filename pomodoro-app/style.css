@@ -148,6 +148,14 @@ body {
     margin-bottom: 15px;
 }
 
+#prayer-timer {
+    display: none;
+    margin-top: -5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
 button {
     font-family: 'Poppins', sans-serif;
     border: none;
@@ -373,4 +381,8 @@ body.zen-mode .settings,
 body.zen-mode .daily-stats,
 body.zen-mode .opacity-control {
     display: none !important;
+}
+
+body.zen-mode #prayer-timer {
+    display: block;
 }
