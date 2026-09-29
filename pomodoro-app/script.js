@@ -10,6 +10,8 @@ const backgrounds = [
 
 let workMinutes = 15;
 let restMinutes = 5;
+let targetSessions = 1;
+let currentSession = 1;
 let timeLeft = workMinutes * 60;
 let isRunning = false;
 let isWorkMode = true;
@@ -22,6 +24,14 @@ let quoteInterval = null;
 let dynamicBackgrounds = [];
 let currentBgIndex = 0;
 
+// Daily stats
+let dailyStats = JSON.parse(localStorage.getItem('pomodoroStats')) || { date: '', count: 0 };
+const todayDate = new Date().toDateString();
+if (dailyStats.date !== todayDate) {
+    dailyStats = { date: todayDate, count: 0 };
+    localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+}
+
 const timeDisplay = document.getElementById('time-display');
 const modeText = document.getElementById('mode-text');
 const startBtn = document.getElementById('start-btn');
@@ -29,6 +39,8 @@ const pauseBtn = document.getElementById('pause-btn');
 const resetBtn = document.getElementById('reset-btn');
 const workVal = document.getElementById('work-val');
 const restVal = document.getElementById('rest-val');
+const sessionVal = document.getElementById('session-val');
+const dailySessionsVal = document.getElementById('daily-sessions-val');
 const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
 const prevQuoteBtn = document.getElementById('prev-quote');
@@ -51,11 +63,7 @@ opacitySlider.addEventListener('input', (e) => {
     overlay.style.setProperty('--overlay-opacity', (val / 100) * 0.4);
 });
 
-function updateDisplay() {
-    const m = Math.floor(timeLeft / 60);
-    const s = timeLeft % 60;
-    timeDisplay.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-}
+
 
 function displayQuoteFromHistory() {
     const q = quoteHistory[currentQuoteHistoryIndex];
@@ -235,19 +243,57 @@ function startTimer() {
         if (timeLeft < 0) {
             clearInterval(timerId);
             isRunning = false;
-            // Switch modes
-            isWorkMode = !isWorkMode;
-            timeLeft = (isWorkMode ? workMinutes : restMinutes) * 60;
-            modeText.innerText = isWorkMode ? "Work Session" : "Rest Time";
-            nextQuote();
-            nextBackground();
             
-            // Auto start next session
-            startTimer();
+            if (isWorkMode) {
+                // Switching to Rest Mode
+                isWorkMode = false;
+                timeLeft = restMinutes * 60;
+                modeText.innerText = `Rest Time (Round ${currentSession}/${targetSessions})`;
+                nextQuote();
+                nextBackground();
+                startTimer();
+            } else {
+                // Finished a complete round (Work + Rest)
+                dailyStats.count++;
+                localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+                updateDisplay(); // updates the daily stats UI
+                
+                currentSession++;
+                if (currentSession <= targetSessions) {
+                    isWorkMode = true;
+                    timeLeft = workMinutes * 60;
+                    modeText.innerText = `Work Session (Round ${currentSession}/${targetSessions})`;
+                    nextQuote();
+                    nextBackground();
+                    startTimer();
+                } else {
+                    // Target reached, stop completely
+                    modeText.innerText = "All Rounds Complete! 🎉";
+                    isWorkMode = true;
+                    currentSession = 1;
+                    timeLeft = workMinutes * 60;
+                    startBtn.style.display = 'block';
+                    pauseBtn.style.display = 'none';
+                    releaseWakeLock();
+                }
+            }
         } else {
             updateDisplay();
         }
     }, 1000);
+}
+
+function updateDisplay() {
+    const mins = Math.floor(timeLeft / 60);
+    const secs = timeLeft % 60;
+    timeDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    
+    dailySessionsVal.innerText = dailyStats.count;
+    
+    // Optional: only show round info if target is > 1
+    if (isRunning || timeLeft > 0) {
+        // Just maintain current mode text set by resetTimer or startTimer
+    }
 }
 
 function pauseTimer() {
@@ -261,7 +307,8 @@ function pauseTimer() {
 function resetTimer() {
     pauseTimer();
     isWorkMode = true;
-    modeText.innerText = "Work Session";
+    currentSession = 1;
+    modeText.innerText = targetSessions > 1 ? `Work Session (Round 1/${targetSessions})` : "Work Session";
     timeLeft = workMinutes * 60;
     updateDisplay();
     displayQuoteFromHistory();
@@ -273,18 +320,24 @@ function adjustSetting(type, amount) {
     if (isRunning) return;
     
     if (type === 'work') {
-        workMinutes = Math.max(5, workMinutes + amount);
+        workMinutes = Math.max(1, workMinutes + amount);
         workVal.innerText = workMinutes;
         if (isWorkMode) {
             timeLeft = workMinutes * 60;
             updateDisplay();
         }
-    } else {
-        restMinutes = Math.max(5, restMinutes + amount);
+    } else if (type === 'rest') {
+        restMinutes = Math.max(1, restMinutes + amount);
         restVal.innerText = restMinutes;
         if (!isWorkMode) {
             timeLeft = restMinutes * 60;
             updateDisplay();
+        }
+    } else if (type === 'session') {
+        targetSessions = Math.max(1, targetSessions + amount);
+        sessionVal.innerText = targetSessions;
+        if (!isRunning) {
+            modeText.innerText = targetSessions > 1 ? `Work Session (Round 1/${targetSessions})` : "Work Session";
         }
     }
 }
@@ -293,6 +346,8 @@ document.getElementById('work-minus').onclick = () => adjustSetting('work', -5);
 document.getElementById('work-plus').onclick = () => adjustSetting('work', 5);
 document.getElementById('rest-minus').onclick = () => adjustSetting('rest', -5);
 document.getElementById('rest-plus').onclick = () => adjustSetting('rest', 5);
+document.getElementById('session-minus').onclick = () => adjustSetting('session', -1);
+document.getElementById('session-plus').onclick = () => adjustSetting('session', 1);
 
 startBtn.onclick = startTimer;
 pauseBtn.onclick = pauseTimer;

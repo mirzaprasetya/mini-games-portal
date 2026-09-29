@@ -37,7 +37,7 @@
             
             <div class="settings">
                 <div class="setting-group">
-                    <label>Work (min)</label>
+                    <label>Work (m)</label>
                     <div class="stepper">
                         <button class="step-btn" id="work-minus">-</button>
                         <span id="work-val">15</span>
@@ -45,13 +45,25 @@
                     </div>
                 </div>
                 <div class="setting-group">
-                    <label>Rest (min)</label>
+                    <label>Rest (m)</label>
                     <div class="stepper">
                         <button class="step-btn" id="rest-minus">-</button>
                         <span id="rest-val">5</span>
                         <button class="step-btn" id="rest-plus">+</button>
                     </div>
                 </div>
+                <div class="setting-group">
+                    <label>Rounds</label>
+                    <div class="stepper">
+                        <button class="step-btn" id="session-minus">-</button>
+                        <span id="session-val">1</span>
+                        <button class="step-btn" id="session-plus">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="daily-stats" style="margin-top: 20px; font-size: 14px; opacity: 0.9;">
+                🏆 Today's Completed Sessions: <strong id="daily-sessions-val">0</strong>
             </div>
             
             <div class="opacity-control">

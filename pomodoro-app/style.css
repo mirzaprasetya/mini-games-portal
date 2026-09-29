@@ -370,6 +370,7 @@ body.zen-mode .quote-nav,
 body.zen-mode .home-btn,
 body.zen-mode .bg-info-container,
 body.zen-mode .settings,
+body.zen-mode .daily-stats,
 body.zen-mode .opacity-control {
     display: none !important;
 }
