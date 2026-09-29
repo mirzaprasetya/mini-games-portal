@@ -364,14 +364,55 @@ let prayerTimes = null;
 let userLocationStr = null;
 const prayerTimerEl = document.getElementById('prayer-timer');
 
+async function getCoordinates() {
+    return new Promise(async (resolve) => {
+        const fallback = async () => {
+            try {
+                const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
+                const ipData = await ipRes.json();
+                resolve({ latitude: ipData.latitude, longitude: ipData.longitude });
+            } catch (e) {
+                resolve(null);
+            }
+        };
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+                fallback,
+                { timeout: 5000, maximumAge: 600000 }
+            );
+        } else {
+            fallback();
+        }
+    });
+}
+
 async function fetchPrayerTimes() {
     try {
-        const ipRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
-        const ipData = await ipRes.json();
-        const { latitude, longitude, city, country } = ipData;
+        const coords = await getCoordinates();
+        if (!coords) return;
+        const { latitude, longitude } = coords;
         
-        if (city && country) {
-            userLocationStr = `${city}, ${country}`;
+        try {
+            const nomRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+            const nomData = await nomRes.json();
+            const address = nomData.address || {};
+            
+            const parts = [];
+            if (address.suburb) parts.push(address.suburb);
+            else if (address.neighbourhood) parts.push(address.neighbourhood);
+            
+            if (address.city) parts.push(address.city);
+            else if (address.town) parts.push(address.town);
+            
+            if (address.country) parts.push(address.country);
+            
+            if (parts.length > 0) {
+                userLocationStr = parts.join(', ');
+            }
+        } catch (err) {
+            console.log("Reverse geocode failed", err);
         }
         
         const prayerRes = await fetch(`https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`);
