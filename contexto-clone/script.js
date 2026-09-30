@@ -7,6 +7,7 @@ let userGuesses = 0;
 
 const form = document.getElementById('guess-form');
 const input = document.getElementById('word-input');
+const guessSubmitBtn = document.getElementById('guess-submit-btn');
 const guessesList = document.getElementById('guesses-list');
 const statsDiv = document.getElementById('stats');
 const guessCountSpan = document.getElementById('guess-count');
@@ -32,6 +33,7 @@ function initGame() {
     guessesList.innerHTML = '';
     input.value = '';
     input.disabled = false;
+    if (guessSubmitBtn) guessSubmitBtn.disabled = false;
     statsDiv.style.display = 'none';
     winMessage.style.display = 'none';
     guessCountSpan.innerText = '0';
@@ -52,6 +54,7 @@ form.addEventListener('submit', async (e) => {
     }
 
     input.disabled = true;
+    if (guessSubmitBtn) guessSubmitBtn.disabled = true;
     input.classList.add('loading');
 
     try {
@@ -59,6 +62,7 @@ form.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         input.disabled = false;
+        if (guessSubmitBtn) guessSubmitBtn.disabled = false;
         input.classList.remove('loading');
         input.value = '';
         input.focus();
@@ -137,6 +141,7 @@ function updateUI() {
 function handleWin(word) {
     gameOver = true;
     input.disabled = true;
+    if (guessSubmitBtn) guessSubmitBtn.disabled = true;
     
     if (gaveUp) {
         winTitle.innerText = "Game Over";
