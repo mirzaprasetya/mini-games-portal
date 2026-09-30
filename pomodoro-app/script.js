@@ -233,6 +233,12 @@ nextBgBtn.onclick = nextBackground;
 
 function startTimer() {
     if (isRunning) return;
+    
+    // Reset complete text if we are manually starting a new session after finishing
+    if (modeText.innerText.includes("Complete")) {
+        modeText.innerText = targetSessions > 1 ? `Work Session (Round ${currentSession}/${targetSessions})` : "Work Session";
+    }
+    
     isRunning = true;
     startBtn.style.display = 'none';
     pauseBtn.style.display = 'block';
