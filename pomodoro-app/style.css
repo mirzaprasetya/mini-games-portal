@@ -336,7 +336,20 @@ button:active { transform: scale(0.95); }
     }
     
     .bg-info-container {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        z-index: 10;
+    }
+    
+    #bg-location, #bg-photographer {
         display: none;
+    }
+    
+    .bg-nav {
+        margin-top: 0;
     }
     
     .time-display {
