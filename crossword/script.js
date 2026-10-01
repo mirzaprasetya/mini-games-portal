@@ -14,13 +14,20 @@ const downCluesList = document.getElementById('down-clues');
 const checkBtn = document.getElementById('check-btn');
 const winModal = document.getElementById('win-modal');
 const playAgainBtn = document.getElementById('play-again-btn');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const puzzleNumberSpan = document.getElementById('puzzle-number');
 
 function loadPuzzle(index) {
-    currentPuzzleIndex = index % puzzles.length;
+    currentPuzzleIndex = (index + puzzles.length) % puzzles.length;
     const p = puzzles[currentPuzzleIndex];
     gridData = p.gridData;
     answers = p.answers;
     words = p.words;
+    
+    if (puzzleNumberSpan) {
+        puzzleNumberSpan.innerText = `Puzzle ${currentPuzzleIndex + 1}`;
+    }
     
     // Clear user input
     Object.keys(userGrid).forEach(k => delete userGrid[k]);
@@ -104,10 +111,16 @@ function handleCellClick(r, c, forceDir = null) {
     } else if (activeRow === r && activeCol === c && wordsForCell.length > 1) {
         // Toggle direction if clicking same cell
         nextWord = wordsForCell.find(w => w.id !== activeWord.id) || nextWord;
-    } else if (activeWord) {
-        // Try to maintain current direction if moving to a new cell
-        const wordInSameDir = wordsForCell.find(w => w.dir === activeWord.dir);
-        if (wordInSameDir) nextWord = wordInSameDir;
+    } else {
+        // Prioritize the word that STARTS at this exact cell
+        const startingWord = wordsForCell.find(w => w.row === r && w.col === c);
+        if (startingWord) {
+            nextWord = startingWord;
+        } else if (activeWord) {
+            // Try to maintain current direction if moving to a new cell
+            const wordInSameDir = wordsForCell.find(w => w.dir === activeWord.dir);
+            if (wordInSameDir) nextWord = wordInSameDir;
+        }
     }
     
     activeWord = nextWord;
@@ -235,6 +248,18 @@ playAgainBtn.addEventListener('click', () => {
     winModal.style.display = 'none';
     loadPuzzle(currentPuzzleIndex + 1);
 });
+
+if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+        loadPuzzle(currentPuzzleIndex - 1);
+    });
+}
+
+if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+        loadPuzzle(currentPuzzleIndex + 1);
+    });
+}
 
 // Setup
 loadPuzzle(0);
