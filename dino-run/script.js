@@ -107,11 +107,15 @@ function gameLoop() {
         dino.grounded = true;
     }
     
-    // Draw Dino
+    // Draw Dino (flipped horizontally to face right)
+    ctx.save();
+    ctx.translate(dino.x + 15, dino.y + 20); // Center of dino
+    ctx.scale(-1, 1); // Flip horizontally
     ctx.font = '40px Arial';
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillText('🦖', dino.x - 5, dino.y - 5);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🦖', 0, 0);
+    ctx.restore();
     
     // Manage obstacles
     if (frameCount > 0 && frameCount % Math.max(60, Math.floor(120 - gameSpeed*5)) === 0) {
