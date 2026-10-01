@@ -249,15 +249,19 @@ function startTimer() {
     
     timerId = setInterval(() => {
         timeLeft--;
+        
+        // Live update focus time every exact minute during a work session
+        if (timeLeft >= 0 && timeLeft % 60 === 0 && isWorkMode) {
+            dailyStats.minutes++;
+            localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+        }
+
         if (timeLeft < 0) {
             clearInterval(timerId);
             isRunning = false;
             
             if (isWorkMode) {
                 // Switching to Rest Mode
-                dailyStats.minutes += workMinutes;
-                localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
-                
                 isWorkMode = false;
                 timeLeft = restMinutes * 60;
                 modeText.innerText = `Rest Time (Round ${currentSession}/${targetSessions})`;
