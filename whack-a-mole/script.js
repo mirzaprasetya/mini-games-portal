@@ -85,10 +85,6 @@ function peep() {
         hole.classList.remove('up');
         if (!timeUp) {
             peep();
-            // Occasionally trigger a double peep to make it exciting
-            if (Math.random() > 0.7) {
-                setTimeout(peep, 200);
-            }
         }
     }, time);
 }
@@ -118,7 +114,8 @@ function startGame() {
         }
     }, 1000);
     
-    peep();
+    peep(); // Chain 1
+    setTimeout(peep, 1000); // Chain 2 (starts 1 second later)
 }
 
 function endGame() {
@@ -133,6 +130,31 @@ function endGame() {
     
     finalScoreEl.innerText = score;
     modal.style.display = 'flex';
+}
+
+function showHitAnimation(hole) {
+    const hitObj = document.createElement('div');
+    hitObj.innerText = '💥';
+    hitObj.style.position = 'absolute';
+    hitObj.style.fontSize = '50px';
+    hitObj.style.pointerEvents = 'none';
+    hitObj.style.left = '50%';
+    hitObj.style.top = '50%';
+    hitObj.style.transform = 'translate(-50%, -50%)';
+    hitObj.style.zIndex = '10';
+    hitObj.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    hole.appendChild(hitObj);
+    
+    // Trigger reflow
+    hitObj.getBoundingClientRect();
+    
+    hitObj.style.top = '10%';
+    hitObj.style.opacity = '0';
+    hitObj.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(15deg)';
+    
+    setTimeout(() => {
+        if (hole.contains(hitObj)) hole.removeChild(hitObj);
+    }, 400);
 }
 
 function whack(e) {
@@ -152,6 +174,7 @@ function whack(e) {
     
     // Visual feedback
     mole.classList.add('whacked');
+    showHitAnimation(hole);
     
     // Retract mole quickly
     setTimeout(() => {
