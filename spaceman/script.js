@@ -85,6 +85,45 @@ function renderKeyboard() {
     });
 }
 
+// Audio setup
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    if (type === 'correct') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, t);
+        osc.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.5, t);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.15);
+    } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, t);
+        osc.frequency.exponentialRampToValueAtTime(80, t + 0.2);
+        
+        gainNode.gain.setValueAtTime(0.3, t);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.25);
+    }
+}
+
 function handleGuess(letter) {
     if (guessedLetters.has(letter) || mistakes >= MAX_MISTAKES) return;
     
@@ -93,6 +132,9 @@ function handleGuess(letter) {
     if (!currentWord.includes(letter)) {
         mistakes++;
         updateDrawing();
+        playSound('wrong');
+    } else {
+        playSound('correct');
     }
     
     renderWord();
