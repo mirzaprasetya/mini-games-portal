@@ -49,9 +49,9 @@ function playScoreSound() {
 // Game settings (will change based on difficulty)
 let GRAVITY = 0.35;
 let FLAP_SPEED = -7;
-let PIPE_SPEED = 2.5;
+let PIPE_SPEED = 2.0;
 let PIPE_WIDTH = 60;
-let PIPE_GAP = 200;
+let PIPE_GAP = 300;
 
 // Game state
 let selectedBird = '🐦';
@@ -90,8 +90,8 @@ diffBtns.forEach(btn => {
         if (selectedDifficulty === 'easy') {
             GRAVITY = 0.35;
             FLAP_SPEED = -7;
-            PIPE_SPEED = 2.5;
-            PIPE_GAP = 200;
+            PIPE_SPEED = 2.0;
+            PIPE_GAP = 300;
         } else {
             GRAVITY = 0.5;
             FLAP_SPEED = -8;
