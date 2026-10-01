@@ -72,11 +72,18 @@ function flap() {
     }
 }
 
-// Input handling
 window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' || e.key === ' ') {
+    if (e.code === 'Space' || e.key === ' ' || e.key === 'ArrowUp') {
         e.preventDefault(); // Prevent page scroll
-        flap();
+        
+        if (startScreen.style.display !== 'none') {
+            // On start screen, space starts the game
+            startGame();
+        } else if (gameOver && gameOverScreen.style.display === 'flex') {
+            startGame();
+        } else {
+            flap();
+        }
     }
 });
 
