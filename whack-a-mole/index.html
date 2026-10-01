@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Whack-a-Mole</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <h1>Whack-a-Mole</h1>
+        </div>
+        
+        <div class="game-info">
+            <div class="score-board">Score: <span id="score" style="color: #f1c40f;">0</span></div>
+            <div class="time-board">Time: <span id="time" style="color: #e74c3c;">30</span>s</div>
+        </div>
+        
+        <div class="grid" id="grid">
+            <div class="hole" id="hole-0"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-1"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-2"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-3"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-4"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-5"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-6"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-7"><div class="mole">🐹</div><div class="dirt"></div></div>
+            <div class="hole" id="hole-8"><div class="mole">🐹</div><div class="dirt"></div></div>
+        </div>
+        
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <!-- Modal -->
+    <div id="game-over-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Time's Up! ⏰</h2>
+            <p style="font-size: 20px;">You whacked <strong id="final-score" style="color: #2ecc71; font-size: 28px;">0</strong> moles!</p>
+            <p class="high-score" style="color: #bdc3c7; margin-bottom: 25px;">High Score: <span id="high-score">0</span></p>
+            <button id="play-again-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
