@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kids Crossword</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <h1>Crossword</h1>
+        </div>
+        
+        <div class="game-container">
+            <!-- Hidden input for mobile keyboard -->
+            <input type="text" id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" maxlength="1">
+            
+            <div class="grid-and-active">
+                <div id="active-clue-display">Tap a square to start!</div>
+                <div id="grid-container"></div>
+                <button id="check-btn">Check Puzzle</button>
+            </div>
+            
+            <div class="clues-wrapper">
+                <div class="clue-section">
+                    <h3>Across</h3>
+                    <ul id="across-clues"></ul>
+                </div>
+                <div class="clue-section">
+                    <h3>Down</h3>
+                    <ul id="down-clues"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Win Modal -->
+    <div id="win-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>You Did It! 🎉</h2>
+            <p>Great job solving the crossword puzzle!</p>
+            <button id="play-again-btn">Reset Puzzle</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
