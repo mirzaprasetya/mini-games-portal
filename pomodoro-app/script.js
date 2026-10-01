@@ -24,6 +24,8 @@ let quoteInterval = null;
 let dynamicBackgrounds = [];
 let currentBgIndex = 0;
 
+let workSecondsAccumulated = 0;
+
 // Daily stats
 let dailyStats = JSON.parse(localStorage.getItem('pomodoroStats')) || { date: '', count: 0, minutes: 0 };
 const todayDate = new Date().toDateString();
@@ -250,10 +252,14 @@ function startTimer() {
     timerId = setInterval(() => {
         timeLeft--;
         
-        // Live update focus time every exact minute during a work session
-        if (timeLeft >= 0 && timeLeft % 60 === 0 && isWorkMode) {
-            dailyStats.minutes++;
-            localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+        // Live update focus time using an accumulator
+        if (isWorkMode) {
+            workSecondsAccumulated++;
+            if (workSecondsAccumulated >= 60) {
+                dailyStats.minutes = (dailyStats.minutes || 0) + 1;
+                workSecondsAccumulated = 0;
+                localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+            }
         }
 
         if (timeLeft < 0) {
@@ -326,6 +332,7 @@ function resetTimer() {
     pauseTimer();
     isWorkMode = true;
     currentSession = 1;
+    workSecondsAccumulated = 0;
     modeText.innerText = targetSessions > 1 ? `Work Session (Round 1/${targetSessions})` : "Work Session";
     timeLeft = workMinutes * 60;
     updateDisplay();
