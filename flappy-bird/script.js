@@ -20,12 +20,6 @@ if (oldHighScore) {
 let highScoreEasy = localStorage.getItem('flappyHighScore_easy') || 0;
 let highScoreNormal = localStorage.getItem('flappyHighScore_normal') || 0;
 
-function updateHighScoreDisplay() {
-    const currentHigh = selectedDifficulty === 'easy' ? highScoreEasy : highScoreNormal;
-    startHighScoreSpan.innerText = `${currentHigh} (${selectedDifficulty === 'easy' ? 'Easy' : 'Normal'})`;
-}
-updateHighScoreDisplay();
-
 // Audio setup
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -67,6 +61,12 @@ let pipes = [];
 let score = 0;
 let gameOver = false;
 let gameLoopId;
+
+function updateHighScoreDisplay() {
+    const currentHigh = selectedDifficulty === 'easy' ? highScoreEasy : highScoreNormal;
+    startHighScoreSpan.innerText = `${currentHigh} (${selectedDifficulty === 'easy' ? 'Easy' : 'Normal'})`;
+}
+updateHighScoreDisplay();
 
 // Difficulty selection
 const diffBtns = document.querySelectorAll('.diff-btn');
