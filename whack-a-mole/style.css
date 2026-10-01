@@ -16,6 +16,8 @@ body {
     align-items: center;
     min-height: 100dvh;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #app {
@@ -82,6 +84,7 @@ h1 {
     max-width: 400px;
     aspect-ratio: 1 / 1;
     margin-bottom: 30px;
+    touch-action: none; /* Prevents double-tap zoom on the whole grid */
 }
 
 .hole {
@@ -90,6 +93,7 @@ h1 {
     position: relative;
     overflow: hidden;
     box-shadow: inset 0 10px 15px rgba(0,0,0,0.6), 0 2px 0 rgba(255,255,255,0.2);
+    touch-action: none; /* Prevents double-tap zoom on holes */
 }
 
 /* The front lip of the hole to hide the mole's bottom */

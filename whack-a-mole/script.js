@@ -16,6 +16,19 @@ let countdownTimer;
 let highScore = localStorage.getItem('whackHighScore') || 0;
 highScoreEl.innerText = highScore;
 
+const ouchWords = ["Ouch!", "Ow!", "Hey!", "Bop!", "Gotcha!"];
+
+function playVoice() {
+    // Cancel any ongoing speech so it feels snappy
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+    }
+    const msg = new SpeechSynthesisUtterance(ouchWords[Math.floor(Math.random() * ouchWords.length)]);
+    msg.pitch = 1.8; // High pitch funny voice
+    msg.rate = 1.5;  // Speak fast
+    window.speechSynthesis.speak(msg);
+}
+
 // Random time generator
 function randomTime(min, max) {
     return Math.round(Math.random() * (max - min) + min);
@@ -112,6 +125,9 @@ function whack(e) {
     
     score++;
     scoreBoard.innerText = score;
+    
+    // Play funny voice
+    playVoice();
     
     // Visual feedback
     mole.classList.add('whacked');
