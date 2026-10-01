@@ -11,8 +11,20 @@ const startHighScoreSpan = document.getElementById('start-high-score');
 const gameOverHighScoreSpan = document.getElementById('game-over-high-score');
 
 // Load high score from localStorage
-let highScore = localStorage.getItem('flappyHighScore') || 0;
-startHighScoreSpan.innerText = highScore;
+let oldHighScore = localStorage.getItem('flappyHighScore');
+if (oldHighScore) {
+    localStorage.setItem('flappyHighScore_normal', oldHighScore);
+    localStorage.removeItem('flappyHighScore');
+}
+
+let highScoreEasy = localStorage.getItem('flappyHighScore_easy') || 0;
+let highScoreNormal = localStorage.getItem('flappyHighScore_normal') || 0;
+
+function updateHighScoreDisplay() {
+    const currentHigh = selectedDifficulty === 'easy' ? highScoreEasy : highScoreNormal;
+    startHighScoreSpan.innerText = `${currentHigh} (${selectedDifficulty === 'easy' ? 'Easy' : 'Normal'})`;
+}
+updateHighScoreDisplay();
 
 // Audio setup
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -40,24 +52,61 @@ function playScoreSound() {
     osc.stop(t + 0.6);
 }
 
-// Game constants
-const GRAVITY = 0.5;
-const FLAP_SPEED = -8;
-const PIPE_SPEED = 3;
-const PIPE_WIDTH = 60;
-const PIPE_GAP = 150;
+// Game settings (will change based on difficulty)
+let GRAVITY = 0.35;
+let FLAP_SPEED = -7;
+let PIPE_SPEED = 2.5;
+let PIPE_WIDTH = 60;
+let PIPE_GAP = 200;
 
 // Game state
 let selectedBird = '🐦';
+let selectedDifficulty = 'easy';
 let bird = { x: 80, y: 300, velocity: 0, radius: 15 };
 let pipes = [];
 let score = 0;
 let gameOver = false;
 let gameLoopId;
 
+// Difficulty selection
+const diffBtns = document.querySelectorAll('.diff-btn');
+diffBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        // Stop event from triggering jump
+        e.stopPropagation();
+        
+        diffBtns.forEach(b => {
+            b.classList.remove('active');
+            b.style.opacity = '0.6';
+            b.style.border = '3px solid transparent';
+        });
+        
+        btn.classList.add('active');
+        btn.style.opacity = '1';
+        btn.style.border = '3px solid white';
+        
+        selectedDifficulty = btn.getAttribute('data-diff');
+        
+        if (selectedDifficulty === 'easy') {
+            GRAVITY = 0.35;
+            FLAP_SPEED = -7;
+            PIPE_SPEED = 2.5;
+            PIPE_GAP = 200;
+        } else {
+            GRAVITY = 0.5;
+            FLAP_SPEED = -8;
+            PIPE_SPEED = 3.5;
+            PIPE_GAP = 150;
+        }
+        
+        updateHighScoreDisplay();
+    });
+});
+
 // Event listener for model selection
 birdBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent immediate flap
         selectedBird = btn.getAttribute('data-bird');
         startGame();
     });
@@ -264,13 +313,21 @@ function gameLoop() {
 function endGame() {
     gameOver = true;
     
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem('flappyHighScore', highScore);
-        startHighScoreSpan.innerText = highScore;
+    let currentHigh = selectedDifficulty === 'easy' ? highScoreEasy : highScoreNormal;
+    
+    if (score > currentHigh) {
+        currentHigh = score;
+        if (selectedDifficulty === 'easy') {
+            highScoreEasy = currentHigh;
+            localStorage.setItem('flappyHighScore_easy', currentHigh);
+        } else {
+            highScoreNormal = currentHigh;
+            localStorage.setItem('flappyHighScore_normal', currentHigh);
+        }
+        updateHighScoreDisplay();
     }
     
     finalScoreSpan.innerText = score;
-    gameOverHighScoreSpan.innerText = highScore;
+    gameOverHighScoreSpan.innerText = currentHigh;
     gameOverScreen.style.display = 'flex';
 }

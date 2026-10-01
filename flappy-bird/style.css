@@ -112,6 +112,23 @@ button:active {
     box-shadow: none;
 }
 
+.diff-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 0;
+    transition: all 0.2s;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.4);
+}
+
+.diff-btn:hover {
+    transform: scale(1.05);
+}
+
+.diff-btn:active {
+    transform: translateY(4px) scale(1.05);
+    box-shadow: none;
+}
+
 button:hover {
     background-color: #27ae60;
 }

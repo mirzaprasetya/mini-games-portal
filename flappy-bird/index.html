@@ -12,7 +12,11 @@
         <!-- Start Screen -->
         <div id="start-screen">
             <h1>Flappy Bird</h1>
-            <h2>Choose Your Bird</h2>
+            <div id="difficulty-selection" style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <button class="diff-btn active" data-diff="easy" style="background-color: #2ecc71; opacity: 1; border: 3px solid white;">Easy (Kids)</button>
+                <button class="diff-btn" data-diff="normal" style="background-color: #e74c3c; opacity: 0.6; border: 3px solid transparent;">Normal</button>
+            </div>
+            <h2 style="margin-top: 0; margin-bottom: 15px; font-size: 20px;">Choose Bird to Start</h2>
             <div id="bird-selection">
                 <button class="bird-btn" data-bird="🐦"><span class="emoji">🐦</span><span class="name">Blue Bird</span></button>
                 <button class="bird-btn" data-bird="🦅"><span class="emoji">🦅</span><span class="name">Eagle</span></button>
