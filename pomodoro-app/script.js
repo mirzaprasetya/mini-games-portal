@@ -25,11 +25,14 @@ let dynamicBackgrounds = [];
 let currentBgIndex = 0;
 
 // Daily stats
-let dailyStats = JSON.parse(localStorage.getItem('pomodoroStats')) || { date: '', count: 0 };
+let dailyStats = JSON.parse(localStorage.getItem('pomodoroStats')) || { date: '', count: 0, minutes: 0 };
 const todayDate = new Date().toDateString();
 if (dailyStats.date !== todayDate) {
-    dailyStats = { date: todayDate, count: 0 };
+    dailyStats = { date: todayDate, count: 0, minutes: 0 };
     localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+}
+if (dailyStats.minutes === undefined) {
+    dailyStats.minutes = 0;
 }
 
 const timeDisplay = document.getElementById('time-display');
@@ -252,6 +255,9 @@ function startTimer() {
             
             if (isWorkMode) {
                 // Switching to Rest Mode
+                dailyStats.minutes += workMinutes;
+                localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+                
                 isWorkMode = false;
                 timeLeft = restMinutes * 60;
                 modeText.innerText = `Rest Time (Round ${currentSession}/${targetSessions})`;
@@ -296,7 +302,7 @@ function updateDisplay() {
     const secs = timeLeft % 60;
     timeDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     
-    dailySessionsVal.innerText = dailyStats.count;
+    dailySessionsVal.innerText = dailyStats.minutes;
     
     // Optional: only show round info if target is > 1
     if (isRunning || timeLeft > 0) {
