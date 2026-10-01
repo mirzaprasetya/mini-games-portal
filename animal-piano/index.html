@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Synth Piano</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="back-btn">Back to Home</a>
+        <h1>Synth Piano</h1>
+        <div class="controls">
+            <label for="synth-type">Instrument:</label>
+            <select id="synth-type">
+                <option value="sine">Sine (Smooth)</option>
+                <option value="square">Square (Retro)</option>
+                <option value="sawtooth">Sawtooth (Harsh)</option>
+                <option value="triangle">Triangle (Mellow)</option>
+            </select>
+        </div>
+    </header>
+    
+    <main class="piano-container">
+        <div class="piano">
+            <div class="key" data-note="261.63">C</div>
+            <div class="key" data-note="293.66">D</div>
+            <div class="key" data-note="329.63">E</div>
+            <div class="key" data-note="349.23">F</div>
+            <div class="key" data-note="392.00">G</div>
+            <div class="key" data-note="440.00">A</div>
+            <div class="key" data-note="493.88">B</div>
+            <div class="key" data-note="523.25">C</div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

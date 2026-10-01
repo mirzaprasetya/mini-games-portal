@@ -1,0 +1,97 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+    touch-action: none;
+    overflow: hidden;
+}
+
+.header {
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    background-color: #555;
+}
+
+h1 {
+    color: #333;
+    margin-top: 10px;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+    margin-top: 40px;
+}
+
+.holes, .shapes {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.hole, .shape {
+    width: 100px;
+    height: 100px;
+}
+
+.hole {
+    background-color: #e9ecef;
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.1);
+    border: 2px dashed #adb5bd;
+}
+
+.shape {
+    cursor: grab;
+    touch-action: none;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.shape:active {
+    cursor: grabbing;
+}
+
+.shape.snapped {
+    cursor: default;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+.circle-hole, .circle {
+    border-radius: 50%;
+}
+
+.triangle-hole, .triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.square-hole, .square {
+    border-radius: 10px;
+}
+.square {
+    border-radius: 10px;
+}
+
+.circle { background-color: #ff5252; }
+.square { background-color: #4caf50; }
+.triangle { background-color: #448aff; }

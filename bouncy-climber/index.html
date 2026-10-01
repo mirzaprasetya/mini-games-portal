@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bouncy Climber</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <a href="/" id="home-button">Home</a>
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
+        <div id="game-over" style="display: none;">
+            <h1>Game Over</h1>
+            <p>Score: <span id="final-score">0</span></p>
+            <button id="restart-btn">Tap to Restart</button>
+        </div>
+        <div id="start-screen">
+            <h1>Bouncy Climber</h1>
+            <button id="start-btn">Tap to Start</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
