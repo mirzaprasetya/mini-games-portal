@@ -16,17 +16,34 @@ let countdownTimer;
 let highScore = localStorage.getItem('whackHighScore') || 0;
 highScoreEl.innerText = highScore;
 
-const ouchWords = ["Ouch!", "Ow!", "Hey!", "Bop!", "Gotcha!"];
+// Audio setup for reliable mobile sound
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playVoice() {
-    // Cancel any ongoing speech so it feels snappy
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
+    // Resume audio context for mobile policies
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
     }
-    const msg = new SpeechSynthesisUtterance(ouchWords[Math.floor(Math.random() * ouchWords.length)]);
-    msg.pitch = 1.8; // High pitch funny voice
-    msg.rate = 1.5;  // Speak fast
-    window.speechSynthesis.speak(msg);
+    
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    // Create a funny "bop" or "pop" sound
+    osc.type = 'sine';
+    // Rapid pitch drop sounds like a cartoon "bop"
+    osc.frequency.setValueAtTime(800, t); 
+    osc.frequency.exponentialRampToValueAtTime(100, t + 0.15); 
+    
+    // Quick volume spike and fade out
+    gainNode.gain.setValueAtTime(0.8, t);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    osc.start(t);
+    osc.stop(t + 0.2);
 }
 
 // Random time generator
@@ -77,6 +94,10 @@ function peep() {
 }
 
 function startGame() {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    
     scoreBoard.innerText = 0;
     timeBoard.innerText = timeLimit;
     timeUp = false;
