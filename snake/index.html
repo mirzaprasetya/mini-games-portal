@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <div class="score-board">
+                <span class="score-text">Score: <span id="score">0</span></span>
+                <span class="high-score-text">Best: <span id="high-score">0</span></span>
+            </div>
+        </div>
+        
+        <div class="game-wrapper">
+            <div class="game-container">
+                <canvas id="game-canvas" width="400" height="400"></canvas>
+                
+                <div id="start-overlay" class="overlay">
+                    <h2>Snake</h2>
+                    <p>Swipe or use Arrow Keys to move!</p>
+                    <button id="start-btn">Play</button>
+                </div>
+                
+                <div id="game-over-overlay" class="overlay" style="display: none;">
+                    <h2>Game Over!</h2>
+                    <button id="restart-btn">Try Again</button>
+                </div>
+            </div>
+            
+            <!-- Mobile D-Pad -->
+            <div id="mobile-controls">
+                <div class="dpad-row">
+                    <button class="dpad-btn" id="btn-up">▲</button>
+                </div>
+                <div class="dpad-row">
+                    <button class="dpad-btn" id="btn-left">◀</button>
+                    <button class="dpad-btn" id="btn-down">▼</button>
+                    <button class="dpad-btn" id="btn-right">▶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
