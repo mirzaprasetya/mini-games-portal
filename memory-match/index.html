@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Memory Match</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <div class="score-board">
+                Moves: <span id="moves">0</span>
+            </div>
+        </div>
+        <h1>Memory Match</h1>
+        
+        <div class="grid" id="grid"></div>
+
+        <div id="game-over-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2>You Did It! 🎉</h2>
+                <p>Completed in <span id="final-moves">0</span> moves!</p>
+                <button id="play-again-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

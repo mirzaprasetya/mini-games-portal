@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fruit Catcher</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <div class="score-board">
+                Score: <span id="score">0</span>
+                <span style="margin-left: 15px; font-size:14px; color:#bdc3c7;">Best: <span id="high-score">0</span></span>
+            </div>
+        </div>
+        
+        <div class="game-container">
+            <canvas id="game-canvas" width="400" height="600"></canvas>
+            
+            <div id="start-overlay" class="overlay">
+                <h2>Fruit Catcher</h2>
+                <p>Drag the basket to catch the healthy fruits 🍎<br>Avoid the bombs! 💣</p>
+                <button id="start-btn">Play</button>
+            </div>
+            
+            <div id="game-over-overlay" class="overlay" style="display: none;">
+                <h2>Boom! 💥</h2>
+                <p>Final Score: <span id="final-score">0</span></p>
+                <button id="restart-btn">Try Again</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

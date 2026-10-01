@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Balloon Pop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <div class="score-board">
+                Score: <span id="score">0</span>
+                <span style="margin-left:15px; color:#e74c3c">Lives: <span id="lives">3</span></span>
+            </div>
+        </div>
+        
+        <div class="game-container" id="game-container">
+            <div id="start-overlay" class="overlay">
+                <h2>Balloon Pop</h2>
+                <p>Tap the balloons before they float away!<br>Don't let 3 balloons escape.</p>
+                <button id="start-btn">Play</button>
+            </div>
+            
+            <div id="game-over-overlay" class="overlay" style="display: none;">
+                <h2>Game Over! 💥</h2>
+                <p>Final Score: <span id="final-score">0</span></p>
+                <button id="restart-btn">Try Again</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

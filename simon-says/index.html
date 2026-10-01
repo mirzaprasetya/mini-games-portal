@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Simon Says</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <div class="score-board">
+                Score: <span id="score">0</span>
+            </div>
+        </div>
+        
+        <h1>Simon Says</h1>
+        <p id="status-text">Press Start!</p>
+        
+        <div class="pad-container">
+            <div class="pad" id="pad-0" data-index="0"></div>
+            <div class="pad" id="pad-1" data-index="1"></div>
+            <div class="pad" id="pad-2" data-index="2"></div>
+            <div class="pad" id="pad-3" data-index="3"></div>
+        </div>
+        
+        <button id="start-btn">Start Game</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
