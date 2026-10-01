@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Spaceman</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header-nav">
+            <a href="/" class="home-btn">🏠</a>
+            <h1>Spaceman</h1>
+        </div>
+        
+        <div class="game-container">
+            <div class="status-bar">
+                <span id="guesses-left">Oxygen: 8/8</span>
+            </div>
+            <div id="drawing-container">
+                <svg viewBox="0 0 200 200" id="spaceman-svg">
+                    <!-- Stars background -->
+                    <circle cx="20" cy="30" r="1.5" fill="white" opacity="0.8"/>
+                    <circle cx="150" cy="20" r="1" fill="white" opacity="0.6"/>
+                    <circle cx="180" cy="120" r="2" fill="white" opacity="0.9"/>
+                    <circle cx="40" cy="160" r="1" fill="white" opacity="0.5"/>
+                    <circle cx="100" cy="80" r="1.5" fill="white" opacity="0.7"/>
+                    
+                    <!-- Base (Moon Surface) -->
+                    <path d="M 0 180 Q 50 160 100 170 T 200 180 L 200 200 L 0 200 Z" fill="#7f8c8d" />
+                    
+                    <!-- Spaceman Parts (Hidden by default using CSS) -->
+                    <g id="part-1" class="hidden-part">
+                        <!-- Helmet -->
+                        <rect x="75" y="40" width="50" height="45" rx="15" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="3"/>
+                    </g>
+                    <g id="part-2" class="hidden-part">
+                        <!-- Visor -->
+                        <rect x="85" y="50" width="35" height="20" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+                        <circle cx="110" cy="55" r="2" fill="white" opacity="0.7"/>
+                    </g>
+                    <g id="part-3" class="hidden-part">
+                        <!-- Body -->
+                        <rect x="75" y="85" width="50" height="55" rx="10" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="3"/>
+                        <!-- Logo/Buttons -->
+                        <circle cx="100" cy="105" r="8" fill="#e74c3c"/>
+                        <line x1="90" y1="125" x2="110" y2="125" stroke="#f1c40f" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+                    <g id="part-4" class="hidden-part">
+                        <!-- Oxygen Tank -->
+                        <rect x="60" y="90" width="15" height="45" rx="5" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2"/>
+                        <path d="M 67 90 C 67 70 85 70 85 85" fill="none" stroke="#95a5a6" stroke-width="3"/> <!-- Tube -->
+                    </g>
+                    <g id="part-5" class="hidden-part">
+                        <!-- Left Arm -->
+                        <path d="M 75 95 C 60 95 55 110 50 120" fill="none" stroke="#ecf0f1" stroke-width="12" stroke-linecap="round"/>
+                        <circle cx="50" cy="120" r="8" fill="#e67e22" /> <!-- Glove -->
+                    </g>
+                    <g id="part-6" class="hidden-part">
+                        <!-- Right Arm -->
+                        <path d="M 125 95 C 140 95 145 110 150 120" fill="none" stroke="#ecf0f1" stroke-width="12" stroke-linecap="round"/>
+                        <circle cx="150" cy="120" r="8" fill="#e67e22" /> <!-- Glove -->
+                    </g>
+                    <g id="part-7" class="hidden-part">
+                        <!-- Left Leg -->
+                        <path d="M 85 140 C 85 155 80 165 75 175" fill="none" stroke="#ecf0f1" stroke-width="14" stroke-linecap="round"/>
+                        <rect x="65" y="172" width="22" height="10" rx="3" fill="#34495e"/> <!-- Boot -->
+                    </g>
+                    <g id="part-8" class="hidden-part">
+                        <!-- Right Leg -->
+                        <path d="M 115 140 C 115 155 120 165 125 175" fill="none" stroke="#ecf0f1" stroke-width="14" stroke-linecap="round"/>
+                        <rect x="113" y="172" width="22" height="10" rx="3" fill="#34495e"/> <!-- Boot -->
+                    </g>
+                </svg>
+            </div>
+            
+            <div id="word-category">Category: ANIMALS</div>
+            
+            <div id="word-display"></div>
+            
+            <div id="keyboard"></div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div id="game-over-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="modal-title">Mission Complete!</h2>
+            <p id="modal-message">You guessed the word!</p>
+            <p class="answer-reveal">The word was: <strong id="reveal-word">SPACESHIP</strong></p>
+            <button id="next-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

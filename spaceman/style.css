@@ -1,0 +1,236 @@
+:root {
+    --bg-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --space-bg: #1a252f;
+    --keyboard-bg: #34495e;
+    --key-bg: #ecf0f1;
+    --key-text: #2c3e50;
+    --key-correct: #2ecc71;
+    --key-wrong: #e74c3c;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100dvh;
+}
+
+#app {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.home-btn {
+    text-decoration: none;
+    font-size: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: background 0.2s;
+    margin-right: 15px;
+}
+
+.home-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #f1c40f;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.status-bar {
+    width: 100%;
+    max-width: 300px;
+    text-align: right;
+    font-size: 16px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+#drawing-container {
+    width: 100%;
+    max-width: 300px;
+    background-color: var(--space-bg);
+    border-radius: 15px;
+    border: 3px solid #34495e;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.hidden-part {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.show-part {
+    opacity: 1;
+}
+
+#word-category {
+    font-size: 18px;
+    color: #3498db;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#word-display {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.letter-box {
+    width: 30px;
+    height: 40px;
+    border-bottom: 4px solid white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    padding-bottom: 5px;
+}
+
+#keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.key {
+    background-color: var(--key-bg);
+    color: var(--key-text);
+    border: none;
+    border-radius: 6px;
+    width: calc(100% / 7 - 8px);
+    max-width: 45px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #bdc3c7;
+    transition: transform 0.1s, box-shadow 0.1s, background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.key:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+.key:disabled {
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: translateY(4px);
+}
+
+.key.correct {
+    background-color: var(--key-correct);
+    color: white;
+}
+
+.key.wrong {
+    background-color: var(--key-wrong);
+    color: white;
+    opacity: 0.7;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #34495e;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    max-width: 80%;
+    color: white;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.answer-reveal {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #bdc3c7;
+}
+
+#reveal-word {
+    color: #f1c40f;
+    font-size: 24px;
+    display: block;
+    margin-top: 10px;
+}
+
+#next-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #2980b9;
+    transition: transform 0.1s;
+}
+
+#next-btn:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
