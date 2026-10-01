@@ -6,6 +6,47 @@ let activeCol = null;
 let activeWord = null;
 const userGrid = {};
 
+// Audio setup
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    if (type === 'win') {
+        // Happy arpeggio
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, t);
+        osc.frequency.setValueAtTime(500, t + 0.1);
+        osc.frequency.setValueAtTime(600, t + 0.2);
+        osc.frequency.setValueAtTime(800, t + 0.3);
+        gain.gain.setValueAtTime(0.5, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
+        osc.start(t); osc.stop(t + 0.6);
+    } else if (type === 'correct') {
+        // Pleasant ding
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, t);
+        osc.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+        osc.start(t); osc.stop(t + 0.3);
+    } else if (type === 'wrong') {
+        // Low buzz
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, t);
+        osc.frequency.exponentialRampToValueAtTime(100, t + 0.3);
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+        osc.start(t); osc.stop(t + 0.3);
+    }
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+}
+
 const gridContainer = document.getElementById('grid-container');
 const hiddenInput = document.getElementById('hidden-input');
 const activeClueDisplay = document.getElementById('active-clue-display');
@@ -220,14 +261,20 @@ function renderGridText() {
 }
 
 checkBtn.addEventListener('click', () => {
+    // Unlock audio context on mobile if not already
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
     let allFilled = true;
     let allCorrect = true;
+    let hasAnyInput = false;
     
     Object.keys(answers).forEach(key => {
         const [r, c] = key.split(',');
         const cell = document.getElementById(`cell-${r}-${c}`);
         const userVal = userGrid[key];
         const correctVal = answers[key];
+        
+        if (userVal) hasAnyInput = true;
         
         if (!userVal) {
             allFilled = false;
@@ -240,7 +287,12 @@ checkBtn.addEventListener('click', () => {
     });
     
     if (allFilled && allCorrect) {
+        playSound('win');
         winModal.style.display = 'flex';
+    } else if (!allCorrect) {
+        playSound('wrong');
+    } else if (hasAnyInput && allCorrect && !allFilled) {
+        playSound('correct');
     }
 });
 
@@ -262,4 +314,4 @@ if (nextBtn) {
 }
 
 // Setup
-loadPuzzle(0);
+loadPuzzle(Math.floor(Math.random() * puzzles.length));
