@@ -7,32 +7,51 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <a href="/" class="back-btn">Back to Home</a>
-        <h1>Synth Piano</h1>
-        <div class="controls">
-            <label for="synth-type">Instrument:</label>
-            <select id="synth-type">
-                <option value="sine">Sine (Smooth)</option>
-                <option value="square">Square (Retro)</option>
-                <option value="sawtooth">Sawtooth (Harsh)</option>
-                <option value="triangle">Triangle (Mellow)</option>
-            </select>
-        </div>
-    </header>
-    
-    <main class="piano-container">
-        <div class="piano">
-            <div class="key" data-note="261.63">C</div>
-            <div class="key" data-note="293.66">D</div>
-            <div class="key" data-note="329.63">E</div>
-            <div class="key" data-note="349.23">F</div>
-            <div class="key" data-note="392.00">G</div>
-            <div class="key" data-note="440.00">A</div>
-            <div class="key" data-note="493.88">B</div>
-            <div class="key" data-note="523.25">C</div>
-        </div>
-    </main>
+    <div id="app-container">
+        <header>
+            <a href="/" class="back-btn">Back</a>
+            <h1>Synth Piano</h1>
+            
+            <div class="controls">
+                <select id="synth-type">
+                    <option value="sine">Sine (Smooth)</option>
+                    <option value="square">Square (Retro)</option>
+                    <option value="sawtooth">Sawtooth (Harsh)</option>
+                    <option value="triangle">Triangle (Mellow)</option>
+                </select>
+                
+                <select id="song-select">
+                    <option value="">-- Autoplay Song --</option>
+                    <option value="twinkle">Twinkle Twinkle</option>
+                    <option value="mary">Mary Had a Little Lamb</option>
+                    <option value="shark">Baby Shark</option>
+                </select>
+                <button id="play-song-btn">Play!</button>
+            </div>
+        </header>
+        
+        <main class="piano-container">
+            <div class="piano">
+                <!-- Octave 1 -->
+                <div class="key" data-note="261.63" id="key-c4">C</div>
+                <div class="key" data-note="293.66" id="key-d4">D</div>
+                <div class="key" data-note="329.63" id="key-e4">E</div>
+                <div class="key" data-note="349.23" id="key-f4">F</div>
+                <div class="key" data-note="392.00" id="key-g4">G</div>
+                <div class="key" data-note="440.00" id="key-a4">A</div>
+                <div class="key" data-note="493.88" id="key-b4">B</div>
+                <!-- Octave 2 -->
+                <div class="key" data-note="523.25" id="key-c5">C</div>
+                <div class="key" data-note="587.33" id="key-d5">D</div>
+                <div class="key" data-note="659.25" id="key-e5">E</div>
+                <div class="key" data-note="698.46" id="key-f5">F</div>
+                <div class="key" data-note="783.99" id="key-g5">G</div>
+                <div class="key" data-note="880.00" id="key-a5">A</div>
+                <div class="key" data-note="987.77" id="key-b5">B</div>
+                <div class="key" data-note="1046.50" id="key-c6">C</div>
+            </div>
+        </main>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -1,9 +1,13 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const synthTypeSelect = document.getElementById('synth-type');
+const songSelect = document.getElementById('song-select');
+const playSongBtn = document.getElementById('play-song-btn');
 const keys = document.querySelectorAll('.key');
 
 // Store active oscillators for multi-touch
 const activeOscillators = new Map();
+let isPlayingSong = false;
+let songTimeout = null;
 
 function playTone(frequency, keyElement) {
     if (audioCtx.state === 'suspended') {
@@ -49,22 +53,17 @@ function stopTone(keyElement) {
 
 // Event Listeners for Multi-touch and Mouse
 keys.forEach(key => {
-    // Mouse
     key.addEventListener('mousedown', (e) => {
+        if(isPlayingSong) stopAutoplay();
         playTone(e.target.dataset.note, e.target);
     });
     
-    key.addEventListener('mouseup', (e) => {
-        stopTone(e.target);
-    });
-    
-    key.addEventListener('mouseleave', (e) => {
-        stopTone(e.target);
-    });
+    key.addEventListener('mouseup', (e) => stopTone(e.target));
+    key.addEventListener('mouseleave', (e) => stopTone(e.target));
 
-    // Touch
     key.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevent scrolling/zooming
+        e.preventDefault(); 
+        if(isPlayingSong) stopAutoplay();
         playTone(e.target.dataset.note, e.target);
     });
     
@@ -77,4 +76,88 @@ keys.forEach(key => {
         e.preventDefault();
         stopTone(e.target);
     });
+});
+
+// Autoplay Songs
+const songs = {
+    twinkle: [
+        { note: 'c4', d: 400 }, { note: 'c4', d: 400 },
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 },
+        { note: 'a4', d: 400 }, { note: 'a4', d: 400 },
+        { note: 'g4', d: 800 },
+        { note: 'f4', d: 400 }, { note: 'f4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'd4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'c4', d: 800 }
+    ],
+    mary: [
+        { note: 'e4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'c4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'e4', d: 800 },
+        { note: 'd4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'd4', d: 800 },
+        { note: 'e4', d: 400 }, { note: 'g4', d: 400 },
+        { note: 'g4', d: 800 }
+    ],
+    shark: [
+        { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 400 }, { note: 'rest', d: 200 },
+        { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 400 }
+    ]
+};
+
+function playNoteSequence(sequence, index) {
+    if (!isPlayingSong || index >= sequence.length) {
+        isPlayingSong = false;
+        playSongBtn.innerText = "Play!";
+        return;
+    }
+
+    const { note, d } = sequence[index];
+    
+    if (note === 'rest') {
+        songTimeout = setTimeout(() => playNoteSequence(sequence, index + 1), d);
+        return;
+    }
+
+    const keyElement = document.getElementById(`key-${note}`);
+    if (keyElement) {
+        playTone(keyElement.dataset.note, keyElement);
+        
+        // Stop note slightly before next note starts to create articulation
+        setTimeout(() => stopTone(keyElement), d - 50);
+    }
+
+    songTimeout = setTimeout(() => playNoteSequence(sequence, index + 1), d);
+}
+
+function stopAutoplay() {
+    isPlayingSong = false;
+    clearTimeout(songTimeout);
+    playSongBtn.innerText = "Play!";
+    keys.forEach(k => stopTone(k));
+}
+
+playSongBtn.addEventListener('click', () => {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    if (isPlayingSong) {
+        stopAutoplay();
+        return;
+    }
+
+    const selectedSong = songSelect.value;
+    if (!selectedSong) return;
+
+    isPlayingSong = true;
+    playSongBtn.innerText = "Stop";
+    playNoteSequence(songs[selectedSong], 0);
 });
