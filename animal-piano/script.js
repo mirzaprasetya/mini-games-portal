@@ -79,6 +79,9 @@ keys.forEach(key => {
 });
 
 // Autoplay Songs
+// Multiplier to slow down the songs
+const tempoMultiplier = 1.5; 
+
 const songs = {
     twinkle: [
         { note: 'c4', d: 400 }, { note: 'c4', d: 400 },
@@ -102,15 +105,27 @@ const songs = {
     ],
     shark: [
         { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
-        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
-        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
-        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
         { note: 'g4', d: 400 }, { note: 'rest', d: 200 },
         { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
-        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
-        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
-        { note: 'g4', d: 200 }, { note: 'g4', d: 200 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
         { note: 'g4', d: 400 }
+    ],
+    jingle: [
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 800 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 800 },
+        { note: 'e4', d: 400 }, { note: 'g4', d: 400 }, { note: 'c4', d: 600 }, { note: 'd4', d: 200 },
+        { note: 'e4', d: 1200 }
+    ],
+    mcdonald: [
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 800 },
+        { note: 'b4', d: 400 }, { note: 'b4', d: 400 }, { note: 'a4', d: 400 }, { note: 'a4', d: 400 },
+        { note: 'g4', d: 1200 }
     ]
 };
 
@@ -121,7 +136,8 @@ function playNoteSequence(sequence, index) {
         return;
     }
 
-    const { note, d } = sequence[index];
+    let { note, d } = sequence[index];
+    d = d * tempoMultiplier; // Slow down the song here
     
     if (note === 'rest') {
         songTimeout = setTimeout(() => playNoteSequence(sequence, index + 1), d);
