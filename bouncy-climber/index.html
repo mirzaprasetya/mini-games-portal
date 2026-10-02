@@ -7,17 +7,38 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <a href="/" id="home-button">Home</a>
-        <canvas id="gameCanvas" width="400" height="600"></canvas>
-        <div id="game-over" style="display: none;">
-            <h1>Game Over</h1>
-            <p>Score: <span id="final-score">0</span></p>
-            <button id="restart-btn">Tap to Restart</button>
+    <div id="game-wrapper">
+        <header>
+            <a href="/" id="home-button">🏠 Home</a>
+            <button id="sound-btn">🔊 Sound</button>
+        </header>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- On screen tutorial arrows -->
+        <div id="tutorial-arrows">
+            <div class="arrow">⬅️</div>
+            <div class="arrow">➡️</div>
         </div>
-        <div id="start-screen">
+
+        <div id="start-screen" class="overlay">
             <h1>Bouncy Climber</h1>
-            <button id="start-btn">Tap to Start</button>
+            <p class="desc">Keep bouncing up on the platforms and see how high you can go!</p>
+            <div class="controls-hint">
+                <b>How to play:</b>
+                <ul>
+                    <li>Your character jumps automatically!</li>
+                    <li>Hold the <b>left or right side</b> of the screen to move.</li>
+                    <li>Keyboard: <b>Left/Right Arrows</b> or <b>A/D</b>.</li>
+                </ul>
+            </div>
+            <button id="start-btn" class="action-btn">Play</button>
+        </div>
+
+        <div id="game-over" class="overlay" style="display: none;">
+            <h1>Game Over!</h1>
+            <p class="desc">You reached <span id="final-score">0</span> platforms.</p>
+            <button id="restart-btn" class="action-btn">Play Again</button>
         </div>
     </div>
     <script src="script.js"></script>
