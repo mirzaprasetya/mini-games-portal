@@ -139,6 +139,47 @@ const songs = {
         { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 800 },
         { note: 'b4', d: 400 }, { note: 'b4', d: 400 }, { note: 'a4', d: 400 }, { note: 'a4', d: 400 },
         { note: 'g4', d: 1200 }
+    ],
+    row: [
+        { note: 'c4', d: 400 }, { note: 'c4', d: 400 }, { note: 'c4', d: 400 }, { note: 'd4', d: 200 }, { note: 'e4', d: 600 },
+        { note: 'e4', d: 400 }, { note: 'd4', d: 200 }, { note: 'e4', d: 400 }, { note: 'f4', d: 200 }, { note: 'g4', d: 1200 },
+        { note: 'c5', d: 200 }, { note: 'c5', d: 200 }, { note: 'c5', d: 200 }, { note: 'g4', d: 200 }, { note: 'g4', d: 200 }, { note: 'g4', d: 200 }, 
+        { note: 'e4', d: 200 }, { note: 'e4', d: 200 }, { note: 'e4', d: 200 }, { note: 'c4', d: 200 }, { note: 'c4', d: 200 }, { note: 'c4', d: 200 },
+        { note: 'g4', d: 400 }, { note: 'f4', d: 200 }, { note: 'e4', d: 400 }, { note: 'd4', d: 200 }, { note: 'c4', d: 1200 }
+    ],
+    london: [
+        { note: 'g4', d: 600 }, { note: 'a4', d: 200 }, { note: 'g4', d: 400 }, { note: 'f4', d: 400 }, 
+        { note: 'e4', d: 400 }, { note: 'f4', d: 400 }, { note: 'g4', d: 800 },
+        { note: 'd4', d: 400 }, { note: 'e4', d: 400 }, { note: 'f4', d: 800 }, 
+        { note: 'e4', d: 400 }, { note: 'f4', d: 400 }, { note: 'g4', d: 800 },
+        { note: 'g4', d: 600 }, { note: 'a4', d: 200 }, { note: 'g4', d: 400 }, { note: 'f4', d: 400 }, 
+        { note: 'e4', d: 400 }, { note: 'f4', d: 400 }, { note: 'g4', d: 800 },
+        { note: 'd4', d: 800 }, { note: 'g4', d: 800 }, { note: 'e4', d: 400 }, { note: 'c4', d: 800 }
+    ],
+    wheels: [
+        { note: 'c4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 },
+        { note: 'a4', d: 400 }, { note: 'c5', d: 400 }, { note: 'a4', d: 400 }, { note: 'f4', d: 800 },
+        { note: 'g4', d: 400 }, { note: 'e4', d: 400 }, { note: 'c4', d: 800 },
+        { note: 'a4', d: 400 }, { note: 'c5', d: 400 }, { note: 'a4', d: 400 }, { note: 'f4', d: 800 },
+        { note: 'c4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 },
+        { note: 'a4', d: 400 }, { note: 'c5', d: 400 }, { note: 'a4', d: 400 }, { note: 'f4', d: 800 },
+        { note: 'g4', d: 800 }, { note: 'c4', d: 800 }, { note: 'f4', d: 1600 }
+    ],
+    birthday: [
+        { note: 'g4', d: 300 }, { note: 'g4', d: 100 }, { note: 'a4', d: 400 }, { note: 'g4', d: 400 }, { note: 'c5', d: 400 }, { note: 'b4', d: 800 },
+        { note: 'g4', d: 300 }, { note: 'g4', d: 100 }, { note: 'a4', d: 400 }, { note: 'g4', d: 400 }, { note: 'd5', d: 400 }, { note: 'c5', d: 800 },
+        { note: 'g4', d: 300 }, { note: 'g4', d: 100 }, { note: 'g5', d: 400 }, { note: 'e5', d: 400 }, { note: 'c5', d: 400 }, { note: 'b4', d: 400 }, { note: 'a4', d: 800 },
+        { note: 'f5', d: 300 }, { note: 'f5', d: 100 }, { note: 'e5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'c5', d: 1200 }
+    ],
+    spider: [
+        { note: 'g4', d: 400 }, { note: 'c5', d: 400 }, { note: 'c5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'e5', d: 600 }, { note: 'e5', d: 200 },
+        { note: 'e5', d: 400 }, { note: 'd5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'e5', d: 400 }, { note: 'c5', d: 800 },
+        { note: 'e5', d: 400 }, { note: 'e5', d: 400 }, { note: 'f5', d: 400 }, { note: 'g5', d: 800 },
+        { note: 'g5', d: 400 }, { note: 'f5', d: 400 }, { note: 'e5', d: 400 }, { note: 'f5', d: 400 }, { note: 'g5', d: 400 }, { note: 'e5', d: 800 },
+        { note: 'c5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'e5', d: 800 },
+        { note: 'e5', d: 400 }, { note: 'd5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'e5', d: 400 }, { note: 'c5', d: 800 },
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'c5', d: 400 }, { note: 'c5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'e5', d: 600 }, { note: 'e5', d: 200 },
+        { note: 'e5', d: 400 }, { note: 'd5', d: 400 }, { note: 'c5', d: 400 }, { note: 'd5', d: 400 }, { note: 'e5', d: 400 }, { note: 'c5', d: 1200 }
     ]
 };
 
