@@ -79,6 +79,11 @@ soundBtn.addEventListener('click', () => {
 // Input handling (Pointer Events)
 let isMovingLeft = false;
 let isMovingRight = false;
+let tiltX = 0;
+
+window.addEventListener('deviceorientation', (e) => {
+    tiltX = e.gamma || 0; // gamma is left/right tilt in degrees (-90 to 90)
+});
 
 function handlePointer(e) {
     if (!isGameRunning) return;
@@ -115,9 +120,9 @@ window.addEventListener('blur', handlePointerEnd);
 // Entities
 const player = {
     x: 200, y: 500, size: 36, vy: 0, vx: 0,
-    speed: 250, // pixels per second
-    jumpForce: -600,
-    gravity: 1200, // pixels per second squared
+    speed: 300, // pixels per second
+    jumpForce: -750, // Increased for higher jump
+    gravity: 1500, // Increased for snappier fall
     scaleY: 1, scaleX: 1
 };
 
@@ -192,11 +197,20 @@ function update(time) {
     lastTime = time;
     
     // Movement
-    if (isMovingLeft) player.vx = -player.speed;
-    else if (isMovingRight) player.vx = player.speed;
-    else player.vx = 0;
+    if (isMovingLeft) {
+        player.vx = -player.speed;
+    } else if (isMovingRight) {
+        player.vx = player.speed;
+    } else if (Math.abs(tiltX) > 3) {
+        // Gyroscope tilt control with a 3-degree deadzone
+        let normalizedTilt = Math.max(-30, Math.min(30, tiltX)) / 30; // Max speed at 30 degrees tilt
+        player.vx = player.speed * normalizedTilt;
+    } else {
+        player.vx = 0;
+    }
     
     player.x += player.vx * dt;
+
     
     // Screen wrap
     if (player.x + player.size/2 < 0) player.x = canvas.logicalWidth + player.size/2;
@@ -259,8 +273,8 @@ function update(time) {
         platforms = platforms.filter(p => p.y < canvas.logicalHeight);
         
         const topPlatform = platforms[platforms.length - 1];
-        // Vertical gap increases slightly with score
-        const gap = Math.min(120, 70 + (score * 2));
+        // Vertical gap increases slightly with score, max out at safe distance
+        const gap = Math.min(100, 60 + (score * 1.5));
         if (topPlatform.y > 0) {
             platforms.push(generatePlatform(topPlatform.y - gap, false));
         }
@@ -347,6 +361,18 @@ function draw() {
 
 startBtn.addEventListener('click', () => {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Request device orientation permission for iOS 13+
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        DeviceOrientationEvent.requestPermission()
+            .then(response => {
+                if (response === 'granted') {
+                    console.log("Gyroscope permission granted.");
+                }
+            })
+            .catch(console.error);
+    }
+    
     initGame();
 });
 restartBtn.addEventListener('click', initGame);
