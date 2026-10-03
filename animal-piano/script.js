@@ -84,44 +84,57 @@ const tempoMultiplier = 1.5;
 
 const songs = {
     twinkle: [
-        { note: 'c4', d: 400 }, { note: 'c4', d: 400 },
-        { note: 'g4', d: 400 }, { note: 'g4', d: 400 },
-        { note: 'a4', d: 400 }, { note: 'a4', d: 400 },
-        { note: 'g4', d: 800 },
-        { note: 'f4', d: 400 }, { note: 'f4', d: 400 },
-        { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
-        { note: 'd4', d: 400 }, { note: 'd4', d: 400 },
-        { note: 'c4', d: 800 }
+        { note: 'c4', d: 400 }, { note: 'c4', d: 400 }, { note: 'g4', d: 400 }, { note: 'g4', d: 400 },
+        { note: 'a4', d: 400 }, { note: 'a4', d: 400 }, { note: 'g4', d: 800 },
+        { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'd4', d: 400 }, { note: 'd4', d: 400 }, { note: 'c4', d: 800 },
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 800 },
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 800 },
+        { note: 'c4', d: 400 }, { note: 'c4', d: 400 }, { note: 'g4', d: 400 }, { note: 'g4', d: 400 },
+        { note: 'a4', d: 400 }, { note: 'a4', d: 400 }, { note: 'g4', d: 800 },
+        { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'd4', d: 400 }, { note: 'd4', d: 400 }, { note: 'c4', d: 800 }
     ],
     mary: [
-        { note: 'e4', d: 400 }, { note: 'd4', d: 400 },
-        { note: 'c4', d: 400 }, { note: 'd4', d: 400 },
-        { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
-        { note: 'e4', d: 800 },
-        { note: 'd4', d: 400 }, { note: 'd4', d: 400 },
-        { note: 'd4', d: 800 },
-        { note: 'e4', d: 400 }, { note: 'g4', d: 400 },
-        { note: 'g4', d: 800 }
+        { note: 'e4', d: 400 }, { note: 'd4', d: 400 }, { note: 'c4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 800 },
+        { note: 'd4', d: 400 }, { note: 'd4', d: 400 }, { note: 'd4', d: 800 },
+        { note: 'e4', d: 400 }, { note: 'g4', d: 400 }, { note: 'g4', d: 800 },
+        { note: 'e4', d: 400 }, { note: 'd4', d: 400 }, { note: 'c4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'd4', d: 400 }, { note: 'd4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'c4', d: 1600 }
     ],
     shark: [
         { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
-        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
-        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
-        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
-        { note: 'g4', d: 400 }, { note: 'rest', d: 200 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 400 }, { note: 'rest', d: 200 },
         { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
-        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
-        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
-        { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
-        { note: 'g4', d: 400 }
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 400 }, { note: 'rest', d: 200 },
+        { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 250 },
+        { note: 'g4', d: 250 }, { note: 'g4', d: 250 }, { note: 'g4', d: 400 }, { note: 'rest', d: 200 },
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'f4', d: 1200 }
     ],
     jingle: [
         { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 800 },
         { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 800 },
         { note: 'e4', d: 400 }, { note: 'g4', d: 400 }, { note: 'c4', d: 600 }, { note: 'd4', d: 200 },
-        { note: 'e4', d: 1200 }
+        { note: 'e4', d: 1600 },
+        { note: 'f4', d: 400 }, { note: 'f4', d: 400 }, { note: 'f4', d: 600 }, { note: 'f4', d: 200 },
+        { note: 'f4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'e4', d: 200 }, { note: 'e4', d: 200 },
+        { note: 'e4', d: 400 }, { note: 'd4', d: 400 }, { note: 'd4', d: 400 }, { note: 'e4', d: 400 },
+        { note: 'd4', d: 800 }, { note: 'g4', d: 800 }
     ],
     mcdonald: [
+        { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'd4', d: 400 },
+        { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 800 },
+        { note: 'b4', d: 400 }, { note: 'b4', d: 400 }, { note: 'a4', d: 400 }, { note: 'a4', d: 400 },
+        { note: 'g4', d: 1200 }, { note: 'rest', d: 400 },
+        { note: 'd4', d: 200 }, { note: 'd4', d: 200 },
         { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'g4', d: 400 }, { note: 'd4', d: 400 },
         { note: 'e4', d: 400 }, { note: 'e4', d: 400 }, { note: 'd4', d: 800 },
         { note: 'b4', d: 400 }, { note: 'b4', d: 400 }, { note: 'a4', d: 400 }, { note: 'a4', d: 400 },

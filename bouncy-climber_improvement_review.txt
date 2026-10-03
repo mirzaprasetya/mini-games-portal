@@ -1,0 +1,438 @@
+BOUNCY-CLIMBER
+GAME IMPROVEMENT REVIEW AND MEETING NOTES
+==========================================================================
+
+Purpose: Discuss how to make the game more approachable for children and
+playable on Android phones, iPhones, tablets, and computers.
+
+Basis: Recommendations from the earlier conversation, based on the uploaded
+index.html, style.css, and script.js.
+
+Testing scope recorded in the original review: Chromium with keyboard,
+mouse, and emulated touch at phone, tablet, and desktop viewport sizes.
+Those observations are reproduced here; this document is not a new test
+pass. Physical Android devices, iPhones, and iPads still need testing.
+Suggested dimensions and difficulty values are starting points for
+playtesting, not final balance decisions.
+
+
+1. OVERALL VERDICT
+==========================================================================
+
+The core idea is workable: an automatically bouncing character that the
+player steers left and right gives the game a simple foundation.
+
+The current version feels more like a mechanics prototype than a finished
+game. The three biggest issues are:
+
+1) Controls are invisible and unexplained.
+2) The fixed 400 x 600 layout is cropped or undersized on several devices.
+3) Once the player understands the mechanic, there is little variety,
+   progression, or reward.
+
+Main recommendation: Do not prioritize extra artwork first. Make the
+controls understandable, make the whole game visible on every screen,
+and make the first few successful landings easy and rewarding.
+
+
+2. DEVICE OBSERVATIONS FROM THE EARLIER REVIEW
+==========================================================================
+
+Small phone: 320 x 568
+- The game extended approximately 16 pixels beyond both the top and bottom.
+- The Home button was partly offscreen.
+- The 400-pixel game width was squeezed to 320 pixels while the height
+  remained 600 pixels.
+
+Modern phone: 390 x 844
+- The game was fully visible and basically playable.
+- The play area remained only 600 pixels tall, leaving large empty bars
+  above and below it.
+
+Landscape phone: 844 x 390
+- Approximately 105 pixels were cropped from the top and bottom.
+- The score, Home button, lower platforms, and floor could disappear.
+- This orientation needs an explicit layout solution.
+
+Tablet: 820 x 1180
+- The game remained 400 x 600.
+- It looked unnecessarily small in the middle of the screen.
+
+Computer: 1366 x 768
+- The game fit, and the arrow keys worked.
+- The presentation looked sparse, and mouse controls were not obvious.
+
+Implementation issue identified in the review:
+The canvas and container use a fixed 400 x 600 layout with centered
+positioning and overflow hidden. Width can shrink without proportional
+height adjustment, leading to distortion or clipping.
+
+
+3. MAKE THE CONTROLS OBVIOUS
+==========================================================================
+
+Current problem
+---------------
+The start screen only says "Tap to Start." It does not explain that:
+- The character jumps automatically.
+- Players must hold the left or right half to move.
+- Desktop players can use the arrow keys.
+- The character wraps around the sides of the screen.
+
+Movement starts on touchstart or mousedown and stops on release. In the
+earlier touch test, a quick tap produced essentially no movement, while a
+sustained press worked. Sliding a finger across the screen does not change
+direction until the player lifts it.
+
+Recommended changes
+-------------------
+Add a short interactive tutorial:
+
+    Hold the left or right side to move.
+    Keyboard: Left / Right arrows or A / D.
+    Your character jumps automatically!
+
+Show two large translucent arrow zones during the first few jumps. Fade
+them after the player has landed successfully two or three times.
+
+Prototype direct horizontal dragging as an alternative touch scheme:
+the character follows the finger smoothly. Test this against hold-to-move
+controls with the intended age group rather than assuming either scheme
+will suit every child.
+
+Explain or demonstrate side wrapping so it is not a surprise.
+
+
+4. REDESIGN THE OPENING 30 SECONDS
+==========================================================================
+
+Current problem
+---------------
+The character begins in mid-air and is already jumping. A full-width floor
+catches it. Without useful steering, it can repeatedly bounce on that
+floor while the score stays at zero.
+
+Scoring only begins when the character climbs above the vertical midpoint.
+That can make the opening look unresponsive or confusing.
+
+Recommended opening
+-------------------
+1) Start the character visibly on a wide platform.
+2) Show a short control demonstration, approximately three seconds.
+3) Put the first platform almost directly above the character.
+4) Make the first three to five landings very easy.
+5) Award the first point or star immediately after the first landing.
+
+The player should understand the basic action and experience a small
+success before facing a difficult jump.
+
+
+5. DESIGN DIFFICULTY INSTEAD OF RELYING ON RANDOMNESS
+==========================================================================
+
+Current problem
+---------------
+Every platform is 60 x 10, vertical spacing is 80, and horizontal positions
+are selected independently at random. The character is only 20 x 20.
+
+This can make the opening inconsistent between runs. Platform size and
+spacing also do not gradually teach the player new challenges.
+
+Recommended changes
+-------------------
+Use a constrained platform generator. Place each new platform relative to
+the previous one and limit horizontal shifts according to the actual jump
+physics. Start with authored or strongly constrained safe sequences.
+
+Suggested starting values for playtesting
+----------------------------------------
+Values below describe the logical game world, not required CSS sizes.
+
+Element                  Current         Proposed starting point
+Character size           20 x 20         32-40 wide and 32-40 high
+Early platform width     60              100-120
+Later platform width     60              Gradually reduce toward 70-90
+Early vertical gap       80              55-65
+Later vertical gap       80              Gradually increase toward 80-90
+Failure consequence      Run ends        Three hearts OR one rescue
+First platforms          Fully random    Authored or strongly constrained
+
+Do not adopt all values blindly. Use them to build a friendlier prototype
+and adjust them after children play it.
+
+
+6. ADD GOALS AND VARIETY GRADUALLY
+==========================================================================
+
+Current problem
+---------------
+Once movement is understood, successful jumps feel very similar. The
+platforms do not change type, spacing does not progress, and variation
+mostly comes from random horizontal positions.
+
+Recommended progression
+-----------------------
+Tutorial stage:
+- Normal platforms only.
+- Focus on steering and landing.
+
+Next stage:
+- Stars or coins placed along safe routes.
+- Simple, visible goals.
+
+Later stage:
+- Spring platforms.
+- Slowly moving platforms.
+- Temporary cloud platforms.
+- Checkpoints.
+
+Advanced endless mode:
+- Narrower platforms.
+- Optional challenges.
+
+Introduce these in stages, not all at once.
+
+Examples of child-friendly goals:
+- Reach 10 clouds.
+- Collect 5 stars.
+- Rescue the bird.
+
+Use concrete goals rather than relying only on an abstract endless score.
+
+
+7. MAKE SUCCESS FEEL REWARDING
+==========================================================================
+
+Current problem
+---------------
+A landing produces a short synthesized boing, but no landing animation,
+particle effect, milestone, or celebration. There is no mute control.
+
+Recommended landing feedback
+----------------------------
+- Squash the character slightly on landing, then stretch it upward.
+- Add a small star or cloud-puff effect.
+- Briefly animate the platform.
+- Increase a clearly visible platform counter.
+- Use a gentle sound, with a sound toggle.
+- Consider optional vibration where supported; do not rely on it.
+- Celebrate every fifth or tenth landing.
+
+Character direction
+-------------------
+Replace the orange square with a recognizable character, such as a jelly
+creature, frog, rabbit, astronaut, or small monster. Even simple eyes and
+facial expressions would make success and failure more expressive.
+
+Art should support readability and feedback, not distract from the next
+platform or substitute for fixing controls and layout.
+
+
+8. CROSS-DEVICE TECHNICAL PRIORITIES
+==========================================================================
+
+A. Scale the game uniformly
+--------------------------
+Keep a consistent logical world, such as 400 x 600, and scale the entire
+playfield proportionally to fit the available viewport.
+
+Recommended approach:
+- Preserve a 2:3 aspect ratio.
+- Use dynamic viewport height, such as 100dvh, rather than relying only
+  on height: 100%.
+- Account for safe areas using env(safe-area-inset-*).
+- Set a sensible maximum display size for tablets and computers.
+- Handle resizing and orientation changes.
+- Do not squeeze width independently of height.
+
+Choose a deliberate landscape-phone behavior:
+Option 1: Fit the portrait game to the available height and put controls
+          in the unused side areas.
+Option 2: Show a friendly "Turn your device upright" screen.
+
+Either approach is preferable to cropping gameplay silently.
+
+B. Render for high-density screens
+----------------------------------
+The current canvas backing store remains 400 x 600 regardless of device
+pixel ratio. This can leave enlarged text and shapes looking soft.
+
+Resize the backing store using window.devicePixelRatio while preserving
+logical game coordinates internally.
+
+C. Make physics independent of display refresh rate
+--------------------------------------------------
+The current update loop applies movement, gravity, and jumping once per
+animation frame. It calls requestAnimationFrame without using elapsed
+time to control physics.
+
+As a result, gameplay speed can differ between low-frame-rate devices and
+60, 90, or 120 Hz displays.
+
+Use either:
+- A fixed 60 Hz physics timestep; or
+- Carefully implemented elapsed-time-based movement and physics.
+
+A fixed timestep is a suitable starting approach for keeping jumps and
+collisions consistent in this game.
+
+D. Unify touch, mouse, and stylus input
+-------------------------------------
+Replace separate mouse and touch logic with Pointer Events:
+pointerdown, pointermove, pointerup, and pointercancel.
+
+Also:
+- Capture the active pointer.
+- Reset movement on blur and visibilitychange.
+- Handle canceled touches.
+- Reset left/right movement flags when a run begins.
+- Support A / D alongside the arrow keys.
+- Prevent relevant browser keyboard actions only while gameplay is active.
+
+E. Preserve browser accessibility
+--------------------------------
+The current viewport disables user scaling, and touch-action: none is
+applied to the whole document.
+
+Remove maximum-scale=1 and user-scalable=no. Restrict touch behavior only
+on the interactive game surface instead of disabling it across the page.
+
+
+9. IMPROVE THE INTERFACE FOR CHILDREN
+==========================================================================
+
+Current problem
+---------------
+The Home button measured approximately 64 x 28 pixels in the earlier test.
+It is small and sits inside the left side of the gameplay area, where a
+player may press while trying to move.
+
+It also remains visible behind the translucent start screen, although the
+overlay blocks interaction.
+
+Recommended interface
+---------------------
+- Put a large pause button in a safe corner.
+- Add a sound toggle.
+- Show hearts or rescue tokens when that feature is implemented.
+- Show height or platform count clearly.
+- Ask for confirmation before leaving an active run.
+- Aim for buttons approximately 48-56 CSS pixels high, with generous
+  spacing. Treat this as a design target for this prototype.
+
+Use device-neutral wording:
+- "Play" instead of "Tap to Start."
+- "Play Again" instead of "Tap to Restart."
+
+Example end-of-run screen:
+
+    Almost there!
+    You reached 12 clouds.
+    Best: 18.
+
+    [ Play Again ]
+
+Keep the tone encouraging and show what the player achieved.
+
+
+10. PROPOSED FIRST PLAYABLE VERSION
+==========================================================================
+
+This is a candidate scope, not a requirement to build everything at once.
+
+1) A friendly animated character around 36 logical pixels in size.
+2) A tested touch control scheme, visible guidance, and keyboard support.
+3) Five guaranteed tutorial platforms.
+4) Forgiving failure: test three hearts or a rescue cloud first.
+5) Ten-platform mini-levels, followed by an endless mode.
+6) Stars on safe routes and an optional bonus star on a harder route.
+7) Wide platforms that gradually become narrower.
+8) A pause menu with sound and exit controls.
+9) A responsive portrait layout and deliberate landscape fallback.
+10) A persistent best score and a small selection of unlockable colors.
+
+Choose the smallest set that demonstrates a clear, enjoyable core loop.
+Additional platform types and cosmetic rewards can follow that milestone.
+
+
+11. RECOMMENDED DEVELOPMENT ORDER
+==========================================================================
+
+PRIORITY 1: RELIABLE FOUNDATION
+- Proportional responsive scaling.
+- High-density canvas rendering.
+- Fixed-timestep or otherwise frame-rate-independent physics.
+- Unified, dependable controls.
+
+PRIORITY 2: A FRIENDLY FIRST EXPERIENCE
+- Clear interactive tutorial.
+- Safe starting platforms.
+- Immediate rewards.
+- Forgiving failure.
+
+PRIORITY 3: PERSONALITY AND PROGRESSION
+- Character and landing animations.
+- Sound settings.
+- Collectibles and small goals.
+- Gradual difficulty and additional platform types.
+
+PRIORITY 4: BROADER VALIDATION
+- Test rotation and resizing.
+- Test browser backgrounding and returning to the game.
+- Test touch cancellation and interrupted input.
+- Check behavior at 30, 60, and 120 Hz or equivalent frame-rate conditions.
+- Test real iOS Safari, Android Chrome, tablets, and desktop browsers.
+
+Do basic device checks during development as well; the final validation
+pass should not be the first time layout or input is tested.
+
+
+12. MEETING DISCUSSION AND DECISION SHEET
+==========================================================================
+
+These prompts organize the recommendations into team decisions.
+
+Target age range: _______________________________________________________
+
+First prototype control scheme: __________________________________________
+
+Landscape behavior: ______________________________________________________
+
+First failure system: ____________________________________________________
+
+First player goal: _______________________________________________________
+
+Character/theme direction: _______________________________________________
+
+Must-have features for the next build: ____________________________________
+__________________________________________________________________________
+
+Features deliberately postponed: __________________________________________
+__________________________________________________________________________
+
+Priority task 1: _________________________________________________________
+Owner: __________________________  Completion check: ______________________
+
+Priority task 2: _________________________________________________________
+Owner: __________________________  Completion check: ______________________
+
+Priority task 3: _________________________________________________________
+Owner: __________________________  Completion check: ______________________
+
+Devices and browsers available for testing: _______________________________
+__________________________________________________________________________
+
+Child playtest observations to discuss:
+- Does the child understand movement without an adult explaining it?
+- Can the child reach the first few platforms?
+- Is the whole playfield and interface visible on each test device?
+- Does the child understand the goal and the result of a fall?
+- Does the child choose to play again?
+
+
+FINAL TAKEAWAY
+==========================================================================
+
+Keep the bouncing concept. First make movement understandable, the layout
+reliable, and early success easy to recognize. Then add personality,
+progression, and variety around that stronger foundation.
