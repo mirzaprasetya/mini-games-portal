@@ -107,16 +107,17 @@ async function syncToServer() {
 
 function updateGreeting() {
     let username = localStorage.getItem('pomodoroUser');
-    if (!username) {
-        loginModal.style.display = 'flex';
-        return;
-    }
     const hour = new Date().getHours();
     let greeting = "Good evening";
     if (hour < 12) greeting = "Good morning";
     else if (hour < 18) greeting = "Good afternoon";
     
-    userGreeting.innerText = `${greeting}, ${username}!`;
+    if (!username) {
+        userGreeting.innerText = `☁️ Login to sync stats`;
+    } else {
+        userGreeting.innerText = `${greeting}, ${username}!`;
+    }
+    
     updateDisplay();
 }
 
@@ -186,6 +187,11 @@ userGreeting.addEventListener('click', () => {
     passwordInput.value = localStorage.getItem('pomodoroPassword') || '';
     loginError.style.display = 'none';
     loginModal.style.display = 'flex';
+});
+
+const closeLoginModalBtn = document.getElementById('close-login-modal');
+closeLoginModalBtn.addEventListener('click', () => {
+    loginModal.style.display = 'none';
 });
 
 updateGreeting();
