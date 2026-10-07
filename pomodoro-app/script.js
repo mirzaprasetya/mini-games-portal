@@ -37,6 +37,13 @@ if (dailyStats.minutes === undefined) {
     dailyStats.minutes = 0;
 }
 
+// Monthly stats
+const currentMonthKey = new Date().toISOString().slice(0, 7); // e.g. "2026-10"
+let monthlyStats = JSON.parse(localStorage.getItem('pomodoroMonthlyStats')) || {};
+if (monthlyStats[currentMonthKey] === undefined) {
+    monthlyStats[currentMonthKey] = 0;
+}
+
 const timeDisplay = document.getElementById('time-display');
 const modeText = document.getElementById('mode-text');
 const startBtn = document.getElementById('start-btn');
@@ -46,6 +53,11 @@ const workVal = document.getElementById('work-val');
 const restVal = document.getElementById('rest-val');
 const sessionVal = document.getElementById('session-val');
 const dailySessionsVal = document.getElementById('daily-sessions-val');
+const monthlySessionsVal = document.getElementById('monthly-sessions-val');
+const userGreeting = document.getElementById('user-greeting');
+const loginModal = document.getElementById('login-modal');
+const usernameInput = document.getElementById('username-input');
+const saveUsernameBtn = document.getElementById('save-username-btn');
 const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
 const prevQuoteBtn = document.getElementById('prev-quote');
@@ -68,7 +80,35 @@ opacitySlider.addEventListener('input', (e) => {
     overlay.style.setProperty('--overlay-opacity', (val / 100) * 0.4);
 });
 
+function updateGreeting() {
+    let username = localStorage.getItem('pomodoroUser');
+    if (!username) {
+        loginModal.style.display = 'flex';
+        return;
+    }
+    const hour = new Date().getHours();
+    let greeting = "Good evening";
+    if (hour < 12) greeting = "Good morning";
+    else if (hour < 18) greeting = "Good afternoon";
+    
+    userGreeting.innerText = `${greeting}, ${username}!`;
+}
 
+saveUsernameBtn.addEventListener('click', () => {
+    const name = usernameInput.value.trim();
+    if (name) {
+        localStorage.setItem('pomodoroUser', name);
+        loginModal.style.display = 'none';
+        updateGreeting();
+    }
+});
+
+userGreeting.addEventListener('click', () => {
+    usernameInput.value = localStorage.getItem('pomodoroUser') || '';
+    loginModal.style.display = 'flex';
+});
+
+updateGreeting();
 
 function displayQuoteFromHistory() {
     const q = quoteHistory[currentQuoteHistoryIndex];
@@ -257,8 +297,11 @@ function startTimer() {
             workSecondsAccumulated++;
             if (workSecondsAccumulated >= 60) {
                 dailyStats.minutes = (dailyStats.minutes || 0) + 1;
+                monthlyStats[currentMonthKey] = (monthlyStats[currentMonthKey] || 0) + 1;
+                
                 workSecondsAccumulated = 0;
                 localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+                localStorage.setItem('pomodoroMonthlyStats', JSON.stringify(monthlyStats));
             }
         }
 
@@ -313,6 +356,7 @@ function updateDisplay() {
     timeDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     
     dailySessionsVal.innerText = dailyStats.minutes;
+    monthlySessionsVal.innerText = monthlyStats[currentMonthKey] || 0;
     
     // Optional: only show round info if target is > 1
     if (isRunning || timeLeft > 0) {

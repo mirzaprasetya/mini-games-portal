@@ -26,6 +26,7 @@
         </div>
         
         <div class="timer-card">
+            <div id="user-greeting" style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: #f1c40f; text-align: center; cursor: pointer;" title="Click to change name"></div>
             <h2 id="mode-text">Work Session</h2>
             <div class="time-display" id="time-display">15:00</div>
             
@@ -64,9 +65,11 @@
                 </div>
             </div>
             
-            <div class="daily-stats" style="margin-top: 20px; font-size: 14px; opacity: 0.9;">
-                🏆 Today's Focus Time: <strong id="daily-sessions-val">0</strong> <strong>mins</strong>
+            <div class="stats-container" style="margin-top: 20px; font-size: 14px; opacity: 0.9; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <div>🏆 Today: <strong id="daily-sessions-val">0</strong> <strong>mins</strong></div>
+                <div>📅 This Month: <strong id="monthly-sessions-val">0</strong> <strong>mins</strong></div>
             </div>
+
             
             <div class="opacity-control">
                 <label>Visibility</label>
@@ -90,6 +93,17 @@
             <span class="close-modal" id="close-modal">&times;</span>
             <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">Quote Insight</h3>
             <p id="explanation-text" style="font-size: 14px; line-height: 1.5; opacity: 0.9; margin: 0;"></p>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="text-align: center;">
+            <h3 style="margin-top: 0; margin-bottom: 15px;">Welcome to Focus!</h3>
+            <p style="font-size: 14px; margin-bottom: 15px;">What should we call you?</p>
+            <input type="text" id="username-input" placeholder="Enter your nickname" style="padding: 10px; width: 80%; border-radius: 5px; border: none; margin-bottom: 15px; font-family: 'Poppins', sans-serif;">
+            <br>
+            <button id="save-username-btn" style="padding: 10px 30px; font-size: 16px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 20px; font-family: 'Poppins', sans-serif;">Save</button>
         </div>
     </div>
 
