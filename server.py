@@ -6,26 +6,32 @@ import urllib.parse
 import ssl
 import os
 import json
-import sqlite3
 
 PORT = int(os.environ.get("PORT", 8080))
 
-# Initialize SQLite database for Pomodoro
-def init_db():
-    conn = sqlite3.connect('pomodoro.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS users
-                 (username TEXT PRIMARY KEY, data TEXT)''')
-                 
-    c.execute("PRAGMA table_info(users)")
-    columns = [info[1] for info in c.fetchall()]
-    if "password" not in columns:
-        c.execute("ALTER TABLE users ADD COLUMN password TEXT")
-        
-    conn.commit()
-    conn.close()
+SUPABASE_URL = "https://mgyjmjktejsfopppazsr.supabase.co"
+SUPABASE_KEY = "sb_publishable_XsvfkanctSLes3nlppKFgA_AXwPgSpS"
 
-init_db()
+def supabase_request(method, endpoint, payload=None):
+    url = f"{SUPABASE_URL}/rest/v1/{endpoint}"
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"
+    }
+    
+    data = None
+    if payload:
+        data = json.dumps(payload).encode('utf-8')
+        
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    try:
+        with urllib.request.urlopen(req) as response:
+            return json.loads(response.read().decode('utf-8'))
+    except urllib.error.HTTPError as e:
+        print(f"Supabase error: {e.read()}")
+        return None
 
 class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
@@ -39,19 +45,27 @@ class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 user_data = data.get('data')
                 
                 if username and user_data is not None:
-                    conn = sqlite3.connect('pomodoro.db')
-                    c = conn.cursor()
+                    # Fetch existing user to check password
+                    existing = supabase_request("GET", f"users?username=eq.{username}")
                     
-                    c.execute("SELECT password FROM users WHERE username = ?", (username,))
-                    row = c.fetchone()
-                    if row and row[0] != password:
-                        self.send_response(401)
-                        self.end_headers()
-                        return
-                    
-                    c.execute("INSERT OR REPLACE INTO users (username, data, password) VALUES (?, ?, ?)", (username, json.dumps(user_data), password))
-                    conn.commit()
-                    conn.close()
+                    if existing and len(existing) > 0:
+                        if existing[0].get('password') != password:
+                            self.send_response(401)
+                            self.end_headers()
+                            return
+                        
+                        # Update existing
+                        supabase_request("PATCH", f"users?username=eq.{username}", {
+                            "data": json.dumps(user_data),
+                            "password": password
+                        })
+                    else:
+                        # Insert new
+                        supabase_request("POST", "users", {
+                            "username": username,
+                            "data": json.dumps(user_data),
+                            "password": password
+                        })
                     
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
@@ -72,17 +86,14 @@ class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 username = data.get('username')
                 password = data.get('password', '')
                 
-                conn = sqlite3.connect('pomodoro.db')
-                c = conn.cursor()
-                c.execute("SELECT data, password FROM users WHERE username = ?", (username,))
-                row = c.fetchone()
-                conn.close()
+                existing = supabase_request("GET", f"users?username=eq.{username}")
                 
                 response_data = {"exists": False, "success": True, "data": None}
-                if row:
-                    saved_password = row[1]
+                
+                if existing and len(existing) > 0:
+                    saved_password = existing[0].get('password')
                     if saved_password == password:
-                        response_data = {"exists": True, "success": True, "data": json.loads(row[0])}
+                        response_data = {"exists": True, "success": True, "data": json.loads(existing[0].get('data', '{}'))}
                     else:
                         response_data = {"exists": True, "success": False, "error": "Incorrect password!"}
                     
