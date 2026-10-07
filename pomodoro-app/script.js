@@ -57,6 +57,8 @@ const monthlySessionsVal = document.getElementById('monthly-sessions-val');
 const userGreeting = document.getElementById('user-greeting');
 const loginModal = document.getElementById('login-modal');
 const usernameInput = document.getElementById('username-input');
+const passwordInput = document.getElementById('password-input');
+const loginError = document.getElementById('login-error');
 const saveUsernameBtn = document.getElementById('save-username-btn');
 const quoteText = document.getElementById('quote-text');
 const quoteAuthor = document.getElementById('quote-author');
@@ -82,6 +84,7 @@ opacitySlider.addEventListener('input', (e) => {
 
 async function syncToServer() {
     const userId = localStorage.getItem('pomodoroUserId');
+    const userPass = localStorage.getItem('pomodoroPassword');
     if (!userId) return;
     
     try {
@@ -90,6 +93,7 @@ async function syncToServer() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: userId,
+                password: userPass || '',
                 data: {
                     daily: dailyStats,
                     monthly: monthlyStats
@@ -119,47 +123,68 @@ function updateGreeting() {
 saveUsernameBtn.addEventListener('click', async () => {
     const rawName = usernameInput.value.trim();
     const nameId = rawName.toLowerCase();
-    if (rawName) {
+    const pass = passwordInput.value;
+    
+    loginError.style.display = 'none';
+    
+    if (rawName && pass) {
         saveUsernameBtn.innerText = 'Loading...';
         try {
             const res = await fetch('/api/pomodoro/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: nameId })
+                body: JSON.stringify({ username: nameId, password: pass })
             });
             const result = await res.json();
             
-            if (result.exists && result.data) {
-                // Load existing data
-                dailyStats = result.data.daily || dailyStats;
-                monthlyStats = result.data.monthly || monthlyStats;
-                
-                // If the date from server doesn't match today, reset daily count locally
-                if (dailyStats.date !== todayDate) {
-                    dailyStats = { date: todayDate, count: 0, minutes: 0 };
+            if (result.success) {
+                if (result.exists && result.data) {
+                    // Load existing data
+                    dailyStats = result.data.daily || dailyStats;
+                    monthlyStats = result.data.monthly || monthlyStats;
+                    
+                    if (dailyStats.date !== todayDate) {
+                        dailyStats = { date: todayDate, count: 0, minutes: 0 };
+                    }
+                    
+                    localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+                    localStorage.setItem('pomodoroMonthlyStats', JSON.stringify(monthlyStats));
+                } else {
+                    // New user, initial sync
+                    localStorage.setItem('pomodoroUser', rawName);
+                    localStorage.setItem('pomodoroUserId', nameId);
+                    localStorage.setItem('pomodoroPassword', pass);
+                    syncToServer();
                 }
                 
-                localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
-                localStorage.setItem('pomodoroMonthlyStats', JSON.stringify(monthlyStats));
-            } else {
-                // New user, initial sync
                 localStorage.setItem('pomodoroUser', rawName);
-                syncToServer();
+                localStorage.setItem('pomodoroUserId', nameId);
+                localStorage.setItem('pomodoroPassword', pass);
+                
+                loginModal.style.display = 'none';
+                updateGreeting();
+            } else {
+                // Incorrect password
+                loginError.innerText = result.error || 'Login failed';
+                loginError.style.display = 'block';
             }
         } catch (e) {
             console.error("Login fetch error:", e);
+            loginError.innerText = 'Network error. Try again.';
+            loginError.style.display = 'block';
         }
         
-        localStorage.setItem('pomodoroUser', rawName);
-        localStorage.setItem('pomodoroUserId', nameId);
-        loginModal.style.display = 'none';
         saveUsernameBtn.innerText = 'Save';
-        updateGreeting();
+    } else {
+        loginError.innerText = 'Please enter both nickname and password';
+        loginError.style.display = 'block';
     }
 });
 
 userGreeting.addEventListener('click', () => {
     usernameInput.value = localStorage.getItem('pomodoroUser') || '';
+    passwordInput.value = localStorage.getItem('pomodoroPassword') || '';
+    loginError.style.display = 'none';
     loginModal.style.display = 'flex';
 });
 

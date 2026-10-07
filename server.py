@@ -16,6 +16,12 @@ def init_db():
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS users
                  (username TEXT PRIMARY KEY, data TEXT)''')
+                 
+    c.execute("PRAGMA table_info(users)")
+    columns = [info[1] for info in c.fetchall()]
+    if "password" not in columns:
+        c.execute("ALTER TABLE users ADD COLUMN password TEXT")
+        
     conn.commit()
     conn.close()
 
@@ -29,12 +35,21 @@ class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 data = json.loads(body)
                 username = data.get('username')
+                password = data.get('password', '')
                 user_data = data.get('data')
                 
                 if username and user_data is not None:
                     conn = sqlite3.connect('pomodoro.db')
                     c = conn.cursor()
-                    c.execute("INSERT OR REPLACE INTO users (username, data) VALUES (?, ?)", (username, json.dumps(user_data)))
+                    
+                    c.execute("SELECT password FROM users WHERE username = ?", (username,))
+                    row = c.fetchone()
+                    if row and row[0] != password:
+                        self.send_response(401)
+                        self.end_headers()
+                        return
+                    
+                    c.execute("INSERT OR REPLACE INTO users (username, data, password) VALUES (?, ?, ?)", (username, json.dumps(user_data), password))
                     conn.commit()
                     conn.close()
                     
@@ -55,16 +70,21 @@ class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 data = json.loads(body)
                 username = data.get('username')
+                password = data.get('password', '')
                 
                 conn = sqlite3.connect('pomodoro.db')
                 c = conn.cursor()
-                c.execute("SELECT data FROM users WHERE username = ?", (username,))
+                c.execute("SELECT data, password FROM users WHERE username = ?", (username,))
                 row = c.fetchone()
                 conn.close()
                 
-                response_data = {"exists": False, "data": None}
+                response_data = {"exists": False, "success": True, "data": None}
                 if row:
-                    response_data = {"exists": True, "data": json.loads(row[0])}
+                    saved_password = row[1]
+                    if saved_password == password:
+                        response_data = {"exists": True, "success": True, "data": json.loads(row[0])}
+                    else:
+                        response_data = {"exists": True, "success": False, "error": "Incorrect password!"}
                     
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
