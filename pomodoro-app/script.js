@@ -182,11 +182,37 @@ saveUsernameBtn.addEventListener('click', async () => {
     }
 });
 
+const logoutBtn = document.getElementById('logout-btn');
+
 userGreeting.addEventListener('click', () => {
-    usernameInput.value = localStorage.getItem('pomodoroUser') || '';
+    const user = localStorage.getItem('pomodoroUser');
+    usernameInput.value = user || '';
     passwordInput.value = localStorage.getItem('pomodoroPassword') || '';
     loginError.style.display = 'none';
+    
+    if (user) {
+        logoutBtn.style.display = 'block';
+    } else {
+        logoutBtn.style.display = 'none';
+    }
+    
     loginModal.style.display = 'flex';
+});
+
+logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('pomodoroUser');
+    localStorage.removeItem('pomodoroUserId');
+    localStorage.removeItem('pomodoroPassword');
+    
+    // Reset local stats
+    dailyStats = { date: todayDate, count: 0, minutes: 0 };
+    monthlyStats = {};
+    monthlyStats[currentMonthKey] = 0;
+    localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+    localStorage.setItem('pomodoroMonthlyStats', JSON.stringify(monthlyStats));
+    
+    loginModal.style.display = 'none';
+    updateGreeting();
 });
 
 const closeLoginModalBtn = document.getElementById('close-login-modal');
