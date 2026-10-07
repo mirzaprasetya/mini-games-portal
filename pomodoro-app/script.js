@@ -392,7 +392,8 @@ function startTimer() {
     if (isRunning) return;
     
     // Reset complete text if we are manually starting a new session after finishing
-    if (modeText.innerText.includes("Complete")) {
+    const currentMode = modeText.textContent || modeText.innerText;
+    if (currentMode.toLowerCase().includes("complete")) {
         modeText.innerText = targetSessions > 1 ? `Work Session (Round ${currentSession}/${targetSessions})` : "Work Session";
     }
     
