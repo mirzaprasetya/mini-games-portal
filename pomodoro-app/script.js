@@ -80,6 +80,27 @@ opacitySlider.addEventListener('input', (e) => {
     overlay.style.setProperty('--overlay-opacity', (val / 100) * 0.4);
 });
 
+async function syncToServer() {
+    const userId = localStorage.getItem('pomodoroUserId');
+    if (!userId) return;
+    
+    try {
+        await fetch('/api/pomodoro/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: userId,
+                data: {
+                    daily: dailyStats,
+                    monthly: monthlyStats
+                }
+            })
+        });
+    } catch (err) {
+        console.error("Failed to sync to server", err);
+    }
+}
+
 function updateGreeting() {
     let username = localStorage.getItem('pomodoroUser');
     if (!username) {
@@ -92,13 +113,47 @@ function updateGreeting() {
     else if (hour < 18) greeting = "Good afternoon";
     
     userGreeting.innerText = `${greeting}, ${username}!`;
+    updateDisplay();
 }
 
-saveUsernameBtn.addEventListener('click', () => {
-    const name = usernameInput.value.trim();
-    if (name) {
-        localStorage.setItem('pomodoroUser', name);
+saveUsernameBtn.addEventListener('click', async () => {
+    const rawName = usernameInput.value.trim();
+    const nameId = rawName.toLowerCase();
+    if (rawName) {
+        saveUsernameBtn.innerText = 'Loading...';
+        try {
+            const res = await fetch('/api/pomodoro/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: nameId })
+            });
+            const result = await res.json();
+            
+            if (result.exists && result.data) {
+                // Load existing data
+                dailyStats = result.data.daily || dailyStats;
+                monthlyStats = result.data.monthly || monthlyStats;
+                
+                // If the date from server doesn't match today, reset daily count locally
+                if (dailyStats.date !== todayDate) {
+                    dailyStats = { date: todayDate, count: 0, minutes: 0 };
+                }
+                
+                localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+                localStorage.setItem('pomodoroMonthlyStats', JSON.stringify(monthlyStats));
+            } else {
+                // New user, initial sync
+                localStorage.setItem('pomodoroUser', rawName);
+                syncToServer();
+            }
+        } catch (e) {
+            console.error("Login fetch error:", e);
+        }
+        
+        localStorage.setItem('pomodoroUser', rawName);
+        localStorage.setItem('pomodoroUserId', nameId);
         loginModal.style.display = 'none';
+        saveUsernameBtn.innerText = 'Save';
         updateGreeting();
     }
 });
@@ -302,6 +357,7 @@ function startTimer() {
                 workSecondsAccumulated = 0;
                 localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
                 localStorage.setItem('pomodoroMonthlyStats', JSON.stringify(monthlyStats));
+                syncToServer();
             }
         }
 
@@ -322,6 +378,7 @@ function startTimer() {
                 // Finished a complete round (Work + Rest)
                 dailyStats.count++;
                 localStorage.setItem('pomodoroStats', JSON.stringify(dailyStats));
+                syncToServer();
                 
                 currentSession++;
                 if (currentSession <= targetSessions) {
