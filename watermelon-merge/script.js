@@ -113,6 +113,25 @@ function gameLoop(time) {
         fruits[i].draw(ctx);
     }
     
+    if (canDrop) {
+        ctx.globalAlpha = 0.6;
+        const config = fruitsConfig[currentFruitLevel];
+        ctx.font = `${config.radius * 2 * 0.8}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        ctx.beginPath();
+        ctx.moveTo(cursorX, config.radius);
+        ctx.lineTo(cursorX, canvas.height);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        ctx.fillText(config.emoji, cursorX, config.radius);
+        ctx.globalAlpha = 1.0;
+    }
+    
     requestAnimationFrame(gameLoop);
 }
 
@@ -184,29 +203,60 @@ function resolveCollisions() {
     }
 }
 
+let currentFruitLevel = Math.floor(Math.random() * 4);
+let nextFruitLevel = Math.floor(Math.random() * 4);
+let cursorX = canvas.width / 2;
+let canDrop = true;
+const nextFruitEl = document.getElementById('next-fruit');
+nextFruitEl.innerText = fruitsConfig[nextFruitLevel].emoji;
+
+function updateCursorX(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    let x = (e.clientX - rect.left) * scaleX;
+    const radius = fruitsConfig[currentFruitLevel].radius;
+    
+    if (x - radius < 0) x = radius;
+    if (x + radius > canvas.width) x = canvas.width - radius;
+    cursorX = x;
+}
+
+canvas.addEventListener('mousemove', updateCursorX);
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    updateCursorX(e.touches[0]);
+}, {passive: false});
+
 canvas.addEventListener('mousedown', handleDrop);
 canvas.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    handleDrop(e.touches[0] || e);
+    updateCursorX(e.touches[0]);
+    handleDrop(e.touches[0]);
 }, {passive: false});
 
 function handleDrop(e) {
+    if (!canDrop) return;
+    
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         audioCtx.resume();
     }
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    let x = (e.clientX - rect.left) * scaleX;
+    updateCursorX(e);
     
-    const level = Math.floor(Math.random() * 3);
-    const radius = fruitsConfig[level].radius;
-    
-    if (x - radius < 0) x = radius;
-    if (x + radius > canvas.width) x = canvas.width - radius;
-    
-    const newFruit = new Fruit(x, radius, level);
+    const newFruit = new Fruit(cursorX, fruitsConfig[currentFruitLevel].radius, currentFruitLevel);
     fruits.push(newFruit);
+    
+    canDrop = false;
+    setTimeout(() => canDrop = true, 600);
+    
+    currentFruitLevel = nextFruitLevel;
+    nextFruitLevel = Math.floor(Math.random() * 4);
+    nextFruitEl.innerText = fruitsConfig[nextFruitLevel].emoji;
+    
+    // Update cursor constraint for new fruit
+    const radius = fruitsConfig[currentFruitLevel].radius;
+    if (cursorX - radius < 0) cursorX = radius;
+    if (cursorX + radius > canvas.width) cursorX = canvas.width - radius;
 }
 
 requestAnimationFrame(gameLoop);
